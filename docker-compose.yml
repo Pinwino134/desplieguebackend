@@ -29,7 +29,8 @@ services:
   # --------------------------------------------------------------
   configserver:
     build:
-      context: ./configserver
+      context: .
+      dockerfile: configserver/Dockerfile
     container_name: configserver
     restart: unless-stopped
     networks:
@@ -40,7 +41,8 @@ services:
   # --------------------------------------------------------------
   discoveryserver:
     build:
-      context: ./discoveryserver
+      context: .
+      dockerfile: discoveryserver/Dockerfile
     container_name: discoveryserver
     restart: unless-stopped
     depends_on:
@@ -53,7 +55,8 @@ services:
   # --------------------------------------------------------------
   apigateway:
     build:
-      context: ./apigateway
+      context: .
+      dockerfile: apigateway/Dockerfile
     container_name: apigateway
     restart: unless-stopped
     ports:
