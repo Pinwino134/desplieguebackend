@@ -1,0 +1,7 @@
+# Este archivo se llama igual que el "default application name" de Spring
+# Cloud Config Server, así que TODOS los clientes (apigateway + los 6
+# microservicios) lo reciben automáticamente.
+eureka:
+  client:
+    service-url:
+      defaultZone: http://discoveryserver:8761/eureka/

@@ -1,0 +1,20 @@
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+server:
+  port: 8091
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/authdb
+    username: postgres
+    password: 1234
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:  
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+jwt:
+  secret: "c2FtcGxlLXNlY3JldC1jYW1iaWFyLWVuLXByb2R1Y2Npb24tZWNjb21lcmNlLXBpbndpbm8tMjAyNg=="
+  expiration-ms: 86400000

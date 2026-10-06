@@ -1,0 +1,20 @@
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+server:
+  port: 8096
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/ventasdb
+    username: postgres
+    password: 1234
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:  
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+logistica:
+  almacen-default-id: 1

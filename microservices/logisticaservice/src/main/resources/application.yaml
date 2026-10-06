@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: logisticaservice
+  config:
+    import: "optional:configserver:http://configserver:8888"

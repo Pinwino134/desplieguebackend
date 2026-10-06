@@ -1,0 +1,172 @@
+services:
+
+  # --------------------------------------------------------------
+  # Una sola instancia de Postgres sirviendo las 6 bases de datos
+  # (coincide con cómo ya estaba configurado: distintas "url" pero
+  # mismo host/puerto). Ver postgres/init-databases.sh.
+  # --------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init-databases.sh:/docker-entrypoint-initdb.d/init-databases.sh
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - eccomerce-net
+
+  # --------------------------------------------------------------
+  # Config Server: sirve los YAML de /config (perfil "native"),
+  # ya quedan empaquetados dentro del jar al compilar.
+  # --------------------------------------------------------------
+  configserver:
+    build:
+      context: ./configserver
+    container_name: configserver
+    restart: unless-stopped
+    networks:
+      - eccomerce-net
+
+  # --------------------------------------------------------------
+  # Eureka Server
+  # --------------------------------------------------------------
+  discoveryserver:
+    build:
+      context: ./discoveryserver
+    container_name: discoveryserver
+    restart: unless-stopped
+    depends_on:
+      - configserver
+    networks:
+      - eccomerce-net
+
+  # --------------------------------------------------------------
+  # API Gateway: único servicio expuesto al exterior (puerto 8080)
+  # --------------------------------------------------------------
+  apigateway:
+    build:
+      context: ./apigateway
+    container_name: apigateway
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on:
+      - configserver
+      - discoveryserver
+    networks:
+      - eccomerce-net
+
+  # --------------------------------------------------------------
+  # Microservicios de negocio
+  # (contexto = raíz del repo, porque heredan de pom.xml padre)
+  # --------------------------------------------------------------
+  authservice:
+    build:
+      context: .
+      dockerfile: microservices/authservice/Dockerfile
+    container_name: authservice
+    restart: unless-stopped
+    depends_on:
+      configserver:
+        condition: service_started
+      discoveryserver:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+    networks:
+      - eccomerce-net
+
+  productosservice:
+    build:
+      context: .
+      dockerfile: microservices/productosservice/Dockerfile
+    container_name: productosservice
+    restart: unless-stopped
+    depends_on:
+      configserver:
+        condition: service_started
+      discoveryserver:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+    networks:
+      - eccomerce-net
+
+  ventasservice:
+    build:
+      context: .
+      dockerfile: microservices/ventasservice/Dockerfile
+    container_name: ventasservice
+    restart: unless-stopped
+    depends_on:
+      configserver:
+        condition: service_started
+      discoveryserver:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+    networks:
+      - eccomerce-net
+
+  pagosservice:
+    build:
+      context: .
+      dockerfile: microservices/pagosservice/Dockerfile
+    container_name: pagosservice
+    restart: unless-stopped
+    depends_on:
+      configserver:
+        condition: service_started
+      discoveryserver:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+    networks:
+      - eccomerce-net
+
+  logisticaservice:
+    build:
+      context: .
+      dockerfile: microservices/logisticaservice/Dockerfile
+    container_name: logisticaservice
+    restart: unless-stopped
+    depends_on:
+      configserver:
+        condition: service_started
+      discoveryserver:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+    networks:
+      - eccomerce-net
+
+  gerenciaservice:
+    build:
+      context: .
+      dockerfile: microservices/gerenciaservice/Dockerfile
+    container_name: gerenciaservice
+    restart: unless-stopped
+    depends_on:
+      configserver:
+        condition: service_started
+      discoveryserver:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+    networks:
+      - eccomerce-net
+
+networks:
+  eccomerce-net:
+    driver: bridge
+
+volumes:
+  postgres_data:

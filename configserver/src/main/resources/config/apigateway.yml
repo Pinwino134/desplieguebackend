@@ -1,0 +1,167 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: auth-service
+              uri: lb://authservice
+              predicates:
+                - Path=/api/v1/auth/**,/api/v1/usuarios/**
+
+            - id: productos-service
+              uri: lb://productosservice
+              predicates:
+                - Path=/api/v1/productos/**,/api/v1/categorias/**,/api/v1/materiales/**,/api/v1/producciones/**
+
+            - id: ventas-service
+              uri: lb://ventasservice
+              predicates:
+                - Path=/api/v1/clientes/**,/api/v1/catalogo/**,/api/v1/pedidos/**,/api/v1/resenas/**,/api/v1/campanas/**,/api/v1/carritos/**,/api/v1/promociones/**,/api/v1/direcciones/**
+
+            - id: pagos-service
+              uri: lb://pagosservice
+              predicates:
+                - Path=/api/v1/metodos-pago/**,/api/v1/pagos/**
+
+            - id: logistica-service
+              uri: lb://logisticaservice
+              predicates:
+                - Path=/api/v1/proveedores/**,/api/v1/transportistas/**,/api/v1/almacenes/**,/api/v1/envios/**,/api/v1/ordenes-compra/**,/api/v1/inventario/**
+
+            - id: gerencia-service
+              uri: lb://gerenciaservice
+              predicates:
+                - Path=/api/v1/kpis/**,/api/v1/presupuestos/**,/api/v1/gerentes/**,/api/v1/reportes/**,/api/v1/decisiones/**
+
+# Mismo secreto que authservice: el gateway solo VALIDA el token, no lo emite.
+jwt:
+  secret: "c2FtcGxlLXNlY3JldC1jYW1iaWFyLWVuLXByb2R1Y2Npb24tZWNjb21lcmNlLXBpbndpbm8tMjAyNg=="
+
+# Rutas que no requieren token. Todo lo que no esté acá exige "Authorization: Bearer <token>".
+app:
+  security:
+    public-routes:
+      - method: POST
+        path: /api/v1/auth/login
+      - method: POST
+        path: /api/v1/usuarios
+      - method: GET
+        path: /api/v1/productos/**
+      - method: GET
+        path: /api/v1/categorias/**
+      - method: GET
+        path: /api/v1/catalogo/**
+
+  # Rutas autenticadas que además exigen un rol (tipoActor) específico.
+  # Si una ruta autenticada NO aparece acá, cualquier usuario logueado
+  # (sin importar su rol) puede usarla, ej: crear su propio pedido.
+    role-routes:
+      # Módulo de gerencia: solo gerencia y administradores
+      - method: "*"
+        path: /api/v1/kpis/**
+        roles: [GERENCIA, ADMINISTRADOR]
+      - method: "*"
+        path: /api/v1/presupuestos/**
+        roles: [GERENCIA, ADMINISTRADOR]
+      - method: "*"
+        path: /api/v1/gerentes/**
+        roles: [GERENCIA, ADMINISTRADOR]
+      - method: "*"
+        path: /api/v1/reportes/**
+        roles: [GERENCIA, ADMINISTRADOR]
+      - method: "*"
+        path: /api/v1/decisiones/**
+        roles: [GERENCIA, ADMINISTRADOR]
+
+      # Gestión de usuarios (el registro POST ya es público arriba):
+      # listar/editar/eliminar cuentas es cosa de administradores
+      - method: GET
+        path: /api/v1/usuarios/**
+        roles: [ADMINISTRADOR]
+      - method: PUT
+        path: /api/v1/usuarios/**
+        roles: [ADMINISTRADOR]
+      - method: DELETE
+        path: /api/v1/usuarios/**
+        roles: [ADMINISTRADOR]
+
+      # Catálogo: leer es público (arriba); crear/editar/activar/desactivar
+      # productos y agregar materiales/procesos es del artesano dueño del
+      # contenido o un admin
+      - method: POST
+        path: /api/v1/productos/**
+        roles: [ARTESANO, ADMINISTRADOR]
+      - method: PUT
+        path: /api/v1/productos/**
+        roles: [ARTESANO, ADMINISTRADOR]
+      - method: PATCH
+        path: /api/v1/productos/**
+        roles: [ARTESANO, ADMINISTRADOR]
+      - method: DELETE
+        path: /api/v1/productos/**
+        roles: [ARTESANO, ADMINISTRADOR]
+      - method: "*"
+        path: /api/v1/materiales/**
+        roles: [ARTESANO, ADMINISTRADOR]
+      - method: "*"
+        path: /api/v1/producciones/**
+        roles: [ARTESANO, ADMINISTRADOR]
+      - method: POST
+        path: /api/v1/categorias/**
+        roles: [ADMINISTRADOR]
+      - method: PUT
+        path: /api/v1/categorias/**
+        roles: [ADMINISTRADOR]
+      - method: DELETE
+        path: /api/v1/categorias/**
+        roles: [ADMINISTRADOR]
+
+      # Logística: operación interna, solo administradores
+      - method: "*"
+        path: /api/v1/almacenes/**
+        roles: [ADMINISTRADOR]
+      - method: "*"
+        path: /api/v1/inventario/**
+        roles: [ADMINISTRADOR]
+      - method: "*"
+        path: /api/v1/proveedores/**
+        roles: [ADMINISTRADOR]
+      - method: "*"
+        path: /api/v1/transportistas/**
+        roles: [ADMINISTRADOR]
+      - method: "*"
+        path: /api/v1/ordenes-compra/**
+        roles: [ADMINISTRADOR]
+      - method: "*"
+        path: /api/v1/envios/**
+        roles: [ADMINISTRADOR]
+
+      # Métodos de pago: el catálogo lo administra un admin; pagar
+      # (POST /api/v1/pagos) queda libre para cualquier autenticado
+      - method: POST
+        path: /api/v1/metodos-pago/**
+        roles: [ADMINISTRADOR]
+      - method: PUT
+        path: /api/v1/metodos-pago/**
+        roles: [ADMINISTRADOR]
+      - method: DELETE
+        path: /api/v1/metodos-pago/**
+        roles: [ADMINISTRADOR]
+
+      # Marketing: campañas y promociones
+      - method: POST
+        path: /api/v1/campanas/**
+        roles: [ADMINISTRADOR, GERENCIA]
+      - method: PUT
+        path: /api/v1/campanas/**
+        roles: [ADMINISTRADOR, GERENCIA]
+      - method: DELETE
+        path: /api/v1/campanas/**
+        roles: [ADMINISTRADOR, GERENCIA]
+      - method: "*"
+        path: /api/v1/promociones/**
+        roles: [ADMINISTRADOR, GERENCIA]
