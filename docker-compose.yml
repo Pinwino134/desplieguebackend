@@ -47,6 +47,8 @@ services:
     restart: unless-stopped
     depends_on:
       - configserver
+    ports:
+      - "8761:8761"
     networks:
       - eccomerce-net
 

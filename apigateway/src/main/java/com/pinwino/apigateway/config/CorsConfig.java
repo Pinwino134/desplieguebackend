@@ -17,7 +17,8 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOrigins(
-            List.of("http://localhost:5173")
+            List.of("http://localhost:5173"),
+		https://front-web-artesania-cjly33iuh-alhenis-projects.vercel.app/"
         );
 
         config.setAllowedMethods(
