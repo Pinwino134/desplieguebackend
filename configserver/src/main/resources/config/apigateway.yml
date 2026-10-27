@@ -15,7 +15,7 @@ spring:
             - id: productos-service
               uri: lb://productosservice
               predicates:
-                - Path=/api/v1/productos/**,/api/v1/categorias/**,/api/v1/materiales/**,/api/v1/producciones/**
+                - Path=/api/v1/productos/**,/api/v1/categorias/**,/api/v1/materiales/**,/api/v1/producciones/**,/api/v1/artesanos/**
 
             - id: ventas-service
               uri: lb://ventasservice
@@ -77,11 +77,18 @@ app:
         path: /api/v1/decisiones/**
         roles: [GERENCIA, ADMINISTRADOR]
 
+      # Mi perfil: cualquier usuario autenticado (el servicio usa X-Usuario-Id,
+      # así que cada quien solo toca su propia cuenta). Va ANTES de las reglas
+      # de /usuarios/** porque se evalúa la primera que coincida.
+      - method: "*"
+        path: /api/v1/usuarios/me
+        roles: [ADMINISTRADOR, GERENCIA, ARTESANO, CLIENTE]
+
       # Gestión de usuarios (el registro POST ya es público arriba):
       # listar/editar/eliminar cuentas es cosa de administradores
       - method: GET
         path: /api/v1/usuarios/**
-        roles: [ADMINISTRADOR]
+        roles: [ADMINISTRADOR, GERENCIA]
       - method: PUT
         path: /api/v1/usuarios/**
         roles: [ADMINISTRADOR]
@@ -119,6 +126,13 @@ app:
       - method: DELETE
         path: /api/v1/categorias/**
         roles: [ADMINISTRADOR]
+
+      # Perfiles de artesano: el listado es de administración/gerencia;
+      # ver o editar UN perfil lo valida el propio servicio (solo el dueño
+      # o un administrador).
+      - method: GET
+        path: /api/v1/artesanos
+        roles: [ADMINISTRADOR, GERENCIA]
 
       # Logística: operación interna, solo administradores
       - method: "*"
