@@ -1,6 +1,7 @@
 
 package com.pinwino.microservices.authservice.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -34,7 +35,9 @@ public class Usuario {
     @Column(nullable = false, unique = true, length = 150)
     private String email;
 
-    @NotBlank
+    // Solo escritura: nunca se devuelve en las respuestas. Se valida en
+    // crear() (obligatoria al registrar) y es opcional al actualizar.
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(nullable = false, length = 255)
     private String password;
 

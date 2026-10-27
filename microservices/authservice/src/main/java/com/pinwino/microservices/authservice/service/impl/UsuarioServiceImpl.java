@@ -19,7 +19,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UsuarioServiceImpl implements UsuarioService {
-
+	
+	
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -87,6 +88,10 @@ public class UsuarioServiceImpl implements UsuarioService {
                     "Ya existe un usuario registrado con el email "
                             + usuario.getEmail()
             );
+        }
+
+        if (usuario.getPassword() == null || usuario.getPassword().isBlank()) {
+            throw new BusinessException("La contraseña es obligatoria");
         }
 
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
