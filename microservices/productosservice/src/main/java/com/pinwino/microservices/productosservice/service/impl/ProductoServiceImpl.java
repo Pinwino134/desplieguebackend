@@ -131,6 +131,29 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     @Transactional
+    public Producto descontarStock(Long id, Integer cantidad) {
+
+        if (cantidad == null || cantidad <= 0) {
+            throw new BusinessException("La cantidad a descontar debe ser mayor a 0");
+        }
+
+        Producto producto = buscarPorId(id);
+
+        int actual = producto.getStock() == null ? 0 : producto.getStock();
+        int nuevo = Math.max(0, actual - cantidad);
+
+        producto.setStock(nuevo);
+
+        // Si se vendió todo, queda agotado (salvo que esté inactivo).
+        if (nuevo == 0 && producto.getEstado() != EstadoProducto.INACTIVO) {
+            producto.setEstado(EstadoProducto.AGOTADO);
+        }
+
+        return productoRepository.save(producto);
+    }
+
+    @Override
+    @Transactional
     public Producto activar(Long id) {
 
         Producto producto = buscarPorId(id);

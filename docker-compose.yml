@@ -79,6 +79,11 @@ services:
       dockerfile: microservices/authservice/Dockerfile
     container_name: authservice
     restart: unless-stopped
+    environment:
+      # Primer administrador (solo se crea si aún no existe ninguno).
+      # Defínelos en un archivo .env junto a este docker-compose.yml.
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
     depends_on:
       configserver:
         condition: service_started

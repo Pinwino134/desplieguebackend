@@ -101,6 +101,19 @@ public class ProductoController {
         );
     }
 
+    // Descuenta stock de un producto vendido.
+    // Uso INTERNO: lo llama ventasservice al confirmarse un pago. El gateway
+    // lo bloquea para cualquier petición externa (ver apigateway.yml).
+    @PostMapping("/{id}/stock/descontar")
+    public ResponseEntity<Producto> descontarStock(
+            @PathVariable Long id,
+            @RequestParam Integer cantidad) {
+
+        return ResponseEntity.ok(
+                productoService.descontarStock(id, cantidad)
+        );
+    }
+
     // Desactiva un producto.
     @PatchMapping("/{id}/desactivar")
     public ResponseEntity<Producto> desactivar(
