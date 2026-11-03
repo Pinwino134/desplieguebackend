@@ -20,7 +20,7 @@ spring:
             - id: ventas-service
               uri: lb://ventasservice
               predicates:
-                - Path=/api/v1/clientes/**,/api/v1/catalogo/**,/api/v1/pedidos/**,/api/v1/resenas/**,/api/v1/campanas/**,/api/v1/carritos/**,/api/v1/promociones/**,/api/v1/direcciones/**
+                - Path=/api/v1/clientes/**,/api/v1/catalogo/**,/api/v1/pedidos/**,/api/v1/resenas/**,/api/v1/campanas/**,/api/v1/carritos/**,/api/v1/promociones/**,/api/v1/direcciones/**,/api/v1/solicitudes/**
 
             - id: pagos-service
               uri: lb://pagosservice
@@ -35,7 +35,7 @@ spring:
             - id: gerencia-service
               uri: lb://gerenciaservice
               predicates:
-                - Path=/api/v1/kpis/**,/api/v1/presupuestos/**,/api/v1/gerentes/**,/api/v1/reportes/**,/api/v1/decisiones/**
+                - Path=/api/v1/kpis/**,/api/v1/presupuestos/**,/api/v1/gerentes/**,/api/v1/reportes/**,/api/v1/decisiones/**,/api/v1/cambios/**
 
 # Mismo secreto que authservice: el gateway solo VALIDA el token, no lo emite.
 jwt:
@@ -63,6 +63,11 @@ app:
       # Módulo de gerencia: solo gerencia y administradores
       - method: "*"
         path: /api/v1/kpis/**
+        roles: [GERENCIA, ADMINISTRADOR]
+      # Gestión de cambios: administración propone/implementa y gerencia aprueba
+      # (qué puede hacer cada rol lo valida el servicio)
+      - method: "*"
+        path: /api/v1/cambios/**
         roles: [GERENCIA, ADMINISTRADOR]
       - method: "*"
         path: /api/v1/presupuestos/**
@@ -138,6 +143,24 @@ app:
       - method: GET
         path: /api/v1/artesanos
         roles: [ADMINISTRADOR, GERENCIA]
+
+      # Solicitudes de servicio: cada usuario ve y crea las suyas (el servicio
+      # valida el dueño con X-Usuario-Id). Lo global y la gestión son restringidos.
+      - method: GET
+        path: /api/v1/solicitudes
+        roles: [ADMINISTRADOR, GERENCIA]
+      - method: GET
+        path: /api/v1/solicitudes/resumen
+        roles: [ADMINISTRADOR, GERENCIA]
+      - method: PATCH
+        path: /api/v1/solicitudes/*/estado
+        roles: [ADMINISTRADOR]
+      - method: PATCH
+        path: /api/v1/solicitudes/*/asignar
+        roles: [ADMINISTRADOR]
+      - method: PATCH
+        path: /api/v1/solicitudes/*/prioridad
+        roles: [ADMINISTRADOR]
 
       # Logística: operación interna, solo administradores
       - method: "*"

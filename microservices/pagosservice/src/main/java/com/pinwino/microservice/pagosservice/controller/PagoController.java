@@ -41,7 +41,7 @@ public class PagoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(pago);
     }
 
-    @PatchMapping("/{id}/estado")
+    @PostMapping("/{id}/estado")
     public ResponseEntity<Pago> actualizarEstado(
             @PathVariable Long id,
             @RequestParam EstadoPago estado,

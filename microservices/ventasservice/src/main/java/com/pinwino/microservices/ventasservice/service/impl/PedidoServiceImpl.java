@@ -162,17 +162,24 @@ public class PedidoServiceImpl implements PedidoService {
         Pedido pedido = buscarPorId(pedidoId);
 
         if (!aprobado) {
+            // Rechazo o cancelación de la compra: el pedido queda CANCELADO en la base
+            if (pedido.getEstado() == EstadoPedido.CANCELADO) {
+                return pedido; // ya estaba cancelado
+            }
+            if (pedido.getEstado() != EstadoPedido.PENDIENTE_PAGO) {
+                throw new BusinessException("No se puede cancelar un pedido en estado " + pedido.getEstado());
+            }
             pedido.setEstado(EstadoPedido.CANCELADO);
             return pedidoRepository.save(pedido);
         }
 
+        // Un pedido solo se puede pagar una vez (evita descontar el stock dos veces)
+        if (pedido.getEstado() != EstadoPedido.PENDIENTE_PAGO) {
+            throw new BusinessException("El pedido ya fue procesado (estado: " + pedido.getEstado() + ")");
+        }
+
         pedido.setEstado(EstadoPedido.CONFIRMADO);
         pedidoRepository.save(pedido);
-
-        // Pago aprobado: descontar del stock lo que se vendió
-        for (DetallePedido detalle : pedido.getDetalles()) {
-            productoClient.descontarStock(detalle.getProductoId(), detalle.getCantidad());
-        }
 
         // Pago aprobado: pedir a logistica-service que cree el envio (llamada sincrona)
         Direccion direccion = direccionRepository.findById(pedido.getDireccionEnvioId())
@@ -180,6 +187,13 @@ public class PedidoServiceImpl implements PedidoService {
         String direccionTexto = direccion.getCalle() + ", " + direccion.getDistrito() + ", " + direccion.getCiudad();
 
         envioClient.crear(almacenDefaultId, new EnvioRequestDTO(pedido.getId(), direccionTexto));
+
+        // Lo ÚLTIMO que se hace fuera de esta base de datos: descontar el stock.
+        // Así, si falla algo antes (por ejemplo el envío), el stock no se pierde.
+        for (DetallePedido detalle : pedido.getDetalles()) {
+            productoClient.descontarStock(detalle.getProductoId(), detalle.getCantidad());
+        }
+
         pedido.setEstado(EstadoPedido.EN_PROCESO);
         return pedidoRepository.save(pedido);
     }

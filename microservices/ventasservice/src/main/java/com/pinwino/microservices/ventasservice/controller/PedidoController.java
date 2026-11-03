@@ -69,7 +69,7 @@ public class PedidoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(pedidoService.agregarDetalle(pedidoId, detalle));
     }
 
-    @PatchMapping("/{id}/estado")
+    @PostMapping("/{id}/estado")
     public ResponseEntity<Pedido> cambiarEstado(@PathVariable Long id, @RequestParam EstadoPedido estado) {
         return ResponseEntity.ok(pedidoService.cambiarEstado(id, estado));
     }
@@ -81,7 +81,7 @@ public class PedidoController {
 
     // Uso interno: lo invoca pagos-service via Feign cuando el pago se aprueba/rechaza.
     // En un entorno real esto deberia protegerse (red interna / token de servicio a servicio).
-    @PatchMapping("/{id}/confirmar-pago")
+    @PostMapping("/{id}/confirmar-pago")
     public ResponseEntity<Pedido> confirmarPago(@PathVariable Long id, @RequestParam boolean aprobado) {
         return ResponseEntity.ok(pedidoService.confirmarPago(id, aprobado));
     }

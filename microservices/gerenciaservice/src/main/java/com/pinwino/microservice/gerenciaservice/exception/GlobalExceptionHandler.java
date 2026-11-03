@@ -15,6 +15,18 @@ public class GlobalExceptionHandler {
                 ApiError.builder().status(404).mensaje(ex.getMessage()).timestamp(LocalDateTime.now()).build());
     }
 
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ApiError> handleBusiness(BusinessException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                ApiError.builder().status(400).mensaje(ex.getMessage()).timestamp(LocalDateTime.now()).build());
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ApiError> handleForbidden(ForbiddenException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                ApiError.builder().status(403).mensaje(ex.getMessage()).timestamp(LocalDateTime.now()).build());
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGeneric(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
