@@ -1,5 +1,5 @@
 # Prometheus: lee las métricas de cada servicio cada 10 segundos.
-# Los servicios exponen /actuator/prometheus en el puerto 8081 (red interna de Docker).
+# Los servicios exponen /actuator/prometheus en el puerto 8081 (red interna de Docker).lobal:
 global:
   scrape_interval: 10s
   evaluation_interval: 10s
@@ -7,49 +7,49 @@ global:
 scrape_configs:
   - job_name: prometheus
     static_configs:
-      - targets: ["localhost:9090"]
+      - targets: ["prometheus:9090"]
 
   - job_name: configserver
     metrics_path: /actuator/prometheus
     static_configs:
-      - targets: ["configserver:8081"]
+      - targets: ["configserver:8888"]
 
   - job_name: discoveryserver
     metrics_path: /actuator/prometheus
     static_configs:
-      - targets: ["discoveryserver:8081"]
+      - targets: ["discoveryserver:8761"]
 
   - job_name: apigateway
     metrics_path: /actuator/prometheus
     static_configs:
-      - targets: ["apigateway:8081"]
+      - targets: ["apigateway:8080"]
 
   - job_name: authservice
     metrics_path: /actuator/prometheus
     static_configs:
-      - targets: ["authservice:8081"]
+      - targets: ["authservice:8091"]
 
   - job_name: productosservice
     metrics_path: /actuator/prometheus
     static_configs:
-      - targets: ["productosservice:8081"]
+      - targets: ["productosservice:8095"]
 
   - job_name: ventasservice
     metrics_path: /actuator/prometheus
     static_configs:
-      - targets: ["ventasservice:8081"]
+      - targets: ["ventasservice:8096"]
 
   - job_name: pagosservice
     metrics_path: /actuator/prometheus
     static_configs:
-      - targets: ["pagosservice:8081"]
+      - targets: ["pagosservice:8094"]
 
   - job_name: logisticaservice
     metrics_path: /actuator/prometheus
     static_configs:
-      - targets: ["logisticaservice:8081"]
+      - targets: ["logisticaservice:8093"]
 
   - job_name: gerenciaservice
     metrics_path: /actuator/prometheus
     static_configs:
-      - targets: ["gerenciaservice:8081"]
+      - targets: ["gerenciaservice:8092"]
