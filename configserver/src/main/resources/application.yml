@@ -10,3 +10,22 @@ spring:
           search-locations: classpath:/config
 server:
   port: 8888
+
+# --------------------------------------------------------------
+# Métricas para Prometheus
+# El puerto de gestión (8081) es APARTE del puerto de la API: no pasa por el
+# filtro JWT del gateway y NO se publica fuera de Docker (solo Prometheus,
+# dentro de la red, puede leerlo).
+# --------------------------------------------------------------
+management:
+  server:
+    port: 8081
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  metrics:
+    distribution:
+      # histogramas de latencia -> permiten calcular percentiles (p95, p99)
+      percentiles-histogram:
+        http.server.requests: true
