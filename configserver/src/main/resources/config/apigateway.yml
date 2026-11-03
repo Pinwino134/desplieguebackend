@@ -99,6 +99,11 @@ app:
       # Catálogo: leer es público (arriba); crear/editar/activar/desactivar
       # productos y agregar materiales/procesos es del artesano dueño del
       # contenido o un admin
+      # Descuento de stock: SOLO lo llama ventasservice por dentro (Feign);
+      # ningún rol externo puede (roles vacío = nadie).
+      - method: POST
+        path: /api/v1/productos/*/stock/descontar
+        roles: []
       - method: POST
         path: /api/v1/productos/**
         roles: [ARTESANO, ADMINISTRADOR]

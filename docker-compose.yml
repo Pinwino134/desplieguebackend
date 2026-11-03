@@ -79,6 +79,11 @@ services:
       dockerfile: microservices/authservice/Dockerfile
     container_name: authservice
     restart: unless-stopped
+    environment:
+      # Primer administrador (solo se crea si aún no existe ninguno).
+      # Defínelos en un archivo .env junto a este docker-compose.yml.
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
     depends_on:
       configserver:
         condition: service_started
@@ -169,9 +174,78 @@ services:
     networks:
       - eccomerce-net
 
+  # --------------------------------------------------------------
+  # MONITOREO: Prometheus (recolecta) + Grafana (visualiza)
+  #   Grafana:    http://localhost:3000   (usuario admin / GRAFANA_ADMIN_PASSWORD)
+  #   Prometheus: http://localhost:9090   (solo accesible desde la propia máquina)
+  # --------------------------------------------------------------
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    container_name: prometheus
+    restart: unless-stopped
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.retention.time=7d
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "127.0.0.1:9090:9090"
+    networks:
+      - eccomerce-net
+
+  grafana:
+    image: grafana/grafana:11.3.1
+    container_name: grafana
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    ports:
+      - "3000:3000"
+    networks:
+      - eccomerce-net
+
+  # --------------------------------------------------------------
+  # PRUEBAS DE CARGA con JMeter (no arranca con "up", solo bajo demanda):
+  #   docker compose --profile loadtest run --rm jmeter
+  # Resultados en ./jmeter/resultados/reporte/index.html
+  # --------------------------------------------------------------
+  jmeter:
+    build: ./jmeter
+    profiles: ["loadtest"]
+    environment:
+      JVM_ARGS: "-Xms512m -Xmx1g"
+    volumes:
+      - ./jmeter:/test
+    networks:
+      - eccomerce-net
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - >
+        rm -rf /test/resultados && mkdir -p /test/resultados &&
+        jmeter -n -t /test/arteandino.jmx
+        -l /test/resultados/resultados.jtl
+        -e -o /test/resultados/reporte
+        -Jhost=apigateway -Jport=8080
+        -Jusuarios=${LOAD_USERS:-50}
+        -Jrampa=${LOAD_RAMP:-30}
+        -Jduracion=${LOAD_DURATION:-120}
+        -Jemail=${LOAD_EMAIL:-}
+        -Jpassword=${LOAD_PASSWORD:-}
+
 networks:
   eccomerce-net:
     driver: bridge
 
 volumes:
   postgres_data:
+  prometheus_data:
+  grafana_data:

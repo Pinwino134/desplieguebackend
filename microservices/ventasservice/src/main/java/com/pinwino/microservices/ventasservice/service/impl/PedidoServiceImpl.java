@@ -1,11 +1,9 @@
 package com.pinwino.microservices.ventasservice.service.impl;
 
 import com.pinwino.microservices.ventasservice.client.EnvioClient;
-import com.pinwino.microservices.ventasservice.client.InventarioClient;
 import com.pinwino.microservices.ventasservice.client.PagoClient;
 import com.pinwino.microservices.ventasservice.client.ProductoClient;
 import com.pinwino.microservices.ventasservice.client.dto.EnvioRequestDTO;
-import com.pinwino.microservices.ventasservice.client.dto.InventarioDTO;
 import com.pinwino.microservices.ventasservice.client.dto.PagoResponseDTO;
 import com.pinwino.microservices.ventasservice.client.dto.ProductoDTO;
 import com.pinwino.microservices.ventasservice.exception.BusinessException;
@@ -36,7 +34,6 @@ public class PedidoServiceImpl implements PedidoService {
     private final DireccionRepository direccionRepository;
 
     private final ProductoClient productoClient;
-    private final InventarioClient inventarioClient;
     private final PagoClient pagoClient;
     private final EnvioClient envioClient;
 
@@ -119,12 +116,13 @@ public class PedidoServiceImpl implements PedidoService {
             throw new BusinessException("El producto " + producto.getNombre() + " no esta activo para la venta");
         }
 
-        // 2) Validar stock disponible (llamada sincrona a logistica-service)
-        List<InventarioDTO> inventarios = inventarioClient.listarPorProducto(detalle.getProductoId());
-        int disponibleTotal = inventarios.stream().mapToInt(InventarioDTO::getCantidadDisponible).sum();
-        if (disponibleTotal < detalle.getCantidad()) {
+        // 2) Validar stock disponible. La fuente de verdad es el stock del
+        //    producto (el mismo que ve el cliente en el catálogo y edita el
+        //    artesano), no el inventario por almacén de logística.
+        int disponible = producto.getStock() == null ? 0 : producto.getStock();
+        if (disponible < detalle.getCantidad()) {
             throw new BusinessException("Stock insuficiente para " + producto.getNombre()
-                    + " (disponible: " + disponibleTotal + ", solicitado: " + detalle.getCantidad() + ")");
+                    + " (disponible: " + disponible + ", solicitado: " + detalle.getCantidad() + ")");
         }
 
         detalle.setPedido(pedido);
@@ -170,6 +168,11 @@ public class PedidoServiceImpl implements PedidoService {
 
         pedido.setEstado(EstadoPedido.CONFIRMADO);
         pedidoRepository.save(pedido);
+
+        // Pago aprobado: descontar del stock lo que se vendió
+        for (DetallePedido detalle : pedido.getDetalles()) {
+            productoClient.descontarStock(detalle.getProductoId(), detalle.getCantidad());
+        }
 
         // Pago aprobado: pedir a logistica-service que cree el envio (llamada sincrona)
         Direccion direccion = direccionRepository.findById(pedido.getDireccionEnvioId())

@@ -1,0 +1,55 @@
+# Prometheus: lee las métricas de cada servicio cada 10 segundos.
+# Los servicios exponen /actuator/prometheus en el puerto 8081 (red interna de Docker).
+global:
+  scrape_interval: 10s
+  evaluation_interval: 10s
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  - job_name: configserver
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["configserver:8081"]
+
+  - job_name: discoveryserver
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["discoveryserver:8081"]
+
+  - job_name: apigateway
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["apigateway:8081"]
+
+  - job_name: authservice
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["authservice:8081"]
+
+  - job_name: productosservice
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["productosservice:8081"]
+
+  - job_name: ventasservice
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["ventasservice:8081"]
+
+  - job_name: pagosservice
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["pagosservice:8081"]
+
+  - job_name: logisticaservice
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["logisticaservice:8081"]
+
+  - job_name: gerenciaservice
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["gerenciaservice:8081"]

@@ -16,6 +16,11 @@ public class CorsConfig {
 
         CorsConfiguration config = new CorsConfiguration();
 
+        // Se usan "patterns" (y no origins exactos) para poder aceptar
+        // cualquier puerto en local y los despliegues de Vercel, que
+        // cambian de URL en cada deploy. Con allowCredentials(true) no
+        // se puede usar "*" a secas, por eso se listan uno a uno.
+        // OJO: los origins nunca llevan "/" al final.
         config.setAllowedOriginPatterns(
             List.of(
                 // Desarrollo local (Vite dev 5173, preview 4173, etc.)

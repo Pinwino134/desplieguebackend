@@ -12,4 +12,5 @@ public class ProductoDTO {
     private BigDecimal precioBase;
     private String estado;
     private Long artesanoId;
+    private Integer stock;
 }

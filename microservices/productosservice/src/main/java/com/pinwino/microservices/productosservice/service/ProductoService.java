@@ -34,6 +34,9 @@ public interface ProductoService {
 
     Producto desactivar(Long id);
 
+    // Descuenta stock tras una venta pagada (nunca baja de 0).
+    Producto descontarStock(Long id, Integer cantidad);
+
     // Gestión de materiales del producto
     ProductoMaterial agregarMaterial(
             Long productoId,
