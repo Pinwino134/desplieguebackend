@@ -1,297 +1,297 @@
-2026-10-30 23:15:18,655 INFO o.a.j.u.JMeterUtils: Setting Locale to en_EN
-2026-10-30 23:15:18,685 INFO o.a.j.JMeter: Loading user properties from: /opt/apache-jmeter-5.6.3/bin/user.properties
-2026-10-30 23:15:18,685 INFO o.a.j.JMeter: Loading system properties from: /opt/apache-jmeter-5.6.3/bin/system.properties
-2026-10-30 23:15:18,685 INFO o.a.j.JMeter: Setting JMeter property: host=apigateway
-2026-10-30 23:15:18,685 INFO o.a.j.JMeter: Setting JMeter property: port=8080
-2026-10-30 23:15:18,685 INFO o.a.j.JMeter: Setting JMeter property: usuarios=80
-2026-10-30 23:15:18,685 INFO o.a.j.JMeter: Setting JMeter property: rampa=30
-2026-10-30 23:15:18,685 INFO o.a.j.JMeter: Setting JMeter property: duracion=70
-2026-10-30 23:15:18,685 INFO o.a.j.JMeter: Setting JMeter property: email=artesano@gmail.com
-2026-10-30 23:15:18,685 INFO o.a.j.JMeter: Setting JMeter property: password=123456
-2026-10-30 23:15:18,690 INFO o.a.j.JMeter: Copyright (c) 1998-2024 The Apache Software Foundation
-2026-10-30 23:15:18,691 INFO o.a.j.JMeter: Version 5.6.3
-2026-10-30 23:15:18,691 INFO o.a.j.JMeter: java.version=21.0.13
-2026-10-30 23:15:18,691 INFO o.a.j.JMeter: java.vm.name=OpenJDK 64-Bit Server VM
-2026-10-30 23:15:18,691 INFO o.a.j.JMeter: os.name=Linux
-2026-10-30 23:15:18,691 INFO o.a.j.JMeter: os.arch=amd64
-2026-10-30 23:15:18,691 INFO o.a.j.JMeter: os.version=6.12.113+deb13-amd64
-2026-10-30 23:15:18,691 INFO o.a.j.JMeter: file.encoding=UTF-8
-2026-10-30 23:15:18,691 INFO o.a.j.JMeter: java.awt.headless=true
-2026-10-30 23:15:18,691 INFO o.a.j.JMeter: Max memory     =1073741824
-2026-10-30 23:15:18,691 INFO o.a.j.JMeter: Available Processors =4
-2026-10-30 23:15:18,704 INFO o.a.j.JMeter: Default Locale=English (EN)
-2026-10-30 23:15:18,704 INFO o.a.j.JMeter: JMeter  Locale=English (EN)
-2026-10-30 23:15:18,704 INFO o.a.j.JMeter: JMeterHome=/opt/apache-jmeter-5.6.3
-2026-10-30 23:15:18,704 INFO o.a.j.JMeter: user.dir  =/test
-2026-10-30 23:15:18,704 INFO o.a.j.JMeter: PWD       =/test
-2026-10-30 23:15:18,705 INFO o.a.j.JMeter: IP: 172.18.0.14 Name: 09283f44d0b1 FullName: 09283f44d0b1
-2026-10-30 23:15:18,717 INFO o.a.j.JMeter: Setting property 'jmeter.reportgenerator.outputdir' to:'/test/resultados/reporte'
-2026-10-30 23:15:18,721 INFO o.a.j.s.FileServer: Default base='/test'
-2026-10-30 23:15:18,724 INFO o.a.j.s.FileServer: Set new base='/test'
-2026-10-30 23:15:18,951 INFO o.a.j.s.SaveService: Testplan (JMX) version: 2.2. Testlog (JTL) version: 2.2
-2026-10-30 23:15:18,981 INFO o.a.j.s.SaveService: Using SaveService properties version 5.0
-2026-10-30 23:15:18,985 INFO o.a.j.s.SaveService: Using SaveService properties file encoding UTF-8
-2026-10-30 23:15:18,989 INFO o.a.j.s.SaveService: Loading file: /test/arteandino.jmx
-2026-10-30 23:15:19,067 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/html is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
-2026-10-30 23:15:19,067 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for application/xhtml+xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
-2026-10-30 23:15:19,067 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for application/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
-2026-10-30 23:15:19,067 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
-2026-10-30 23:15:19,067 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/vnd.wap.wml is org.apache.jmeter.protocol.http.parser.RegexpHTMLParser
-2026-10-30 23:15:19,067 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/css is org.apache.jmeter.protocol.http.parser.CssParser
-2026-10-30 23:15:19,095 INFO o.a.j.JMeter: Creating summariser <summary>
-2026-10-30 23:15:19,110 INFO o.a.j.r.d.ReportGenerator: ReportGenerator will use for Parsing the separator: ','
-2026-10-30 23:15:19,110 INFO o.a.j.r.d.ReportGenerator: Will generate report at end of test from  results file: /test/resultados/resultados.jtl
-2026-10-30 23:15:19,110 INFO o.a.j.r.d.ReportGenerator: Reading report generator properties from: /opt/apache-jmeter-5.6.3/bin/reportgenerator.properties
-2026-10-30 23:15:19,111 INFO o.a.j.r.d.ReportGenerator: Merging with JMeter properties
-2026-10-30 23:15:19,115 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.temp_dir' not found, using default value 'temp' instead.
-2026-10-30 23:15:19,117 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.apdex_per_transaction' not found, using default value 'null' instead.
-2026-10-30 23:15:19,117 INFO o.a.j.r.c.ReportGeneratorConfiguration: apdex_per_transaction is empty, not APDEX per transaction customization
-2026-10-30 23:15:19,117 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.sample_filter' not found, using default value 'null' instead.
-2026-10-30 23:15:19,118 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.report_title' not found, using default value 'null' instead.
-2026-10-30 23:15:19,118 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.start_date' not found, using default value 'null' instead.
-2026-10-30 23:15:19,118 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.end_date' not found, using default value 'null' instead.
-2026-10-30 23:15:19,118 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.date_format' not found, using default value 'null' instead.
-2026-10-30 23:15:19,118 INFO o.a.j.r.c.ReportGeneratorConfiguration: Will use date range start date: null, end date: null
-2026-10-30 23:15:19,122 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.totalTPS.exclude_controllers' not found, using default value 'false' instead.
-2026-10-30 23:15:19,123 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.activeThreadsOverTime.exclude_controllers' not found, using default value 'false' instead.
-2026-10-30 23:15:19,123 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.timeVsThreads.exclude_controllers' not found, using default value 'false' instead.
-2026-10-30 23:15:19,123 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.responseTimeDistribution.exclude_controllers' not found, using default value 'false' instead.
-2026-10-30 23:15:19,123 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.transactionsPerSecond.exclude_controllers' not found, using default value 'false' instead.
-2026-10-30 23:15:19,123 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.responseTimePercentiles.exclude_controllers' not found, using default value 'false' instead.
-2026-10-30 23:15:19,123 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.responseTimePercentilesOverTime.exclude_controllers' not found, using default value 'false' instead.
-2026-10-30 23:15:19,123 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.responseTimesOverTime.exclude_controllers' not found, using default value 'false' instead.
-2026-10-30 23:15:19,123 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.connectTimeOverTime.exclude_controllers' not found, using default value 'false' instead.
-2026-10-30 23:15:19,124 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.latenciesOverTime.exclude_controllers' not found, using default value 'false' instead.
-2026-10-30 23:15:19,125 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.json.filters_only_sample_series' not found, using default value 'true' instead.
-2026-10-30 23:15:19,125 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.json.series_filter' not found, using default value '' instead.
-2026-10-30 23:15:19,125 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.json.show_controllers_only' not found, using default value 'false' instead.
-2026-10-30 23:15:19,126 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.html.filters_only_sample_series' not found, using default value 'true' instead.
-2026-10-30 23:15:19,126 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.html.series_filter' not found, using default value '' instead.
-2026-10-30 23:15:19,126 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.html.show_controllers_only' not found, using default value 'false' instead.
-2026-10-30 23:15:19,142 INFO o.a.j.e.StandardJMeterEngine: Running the test!
-2026-10-30 23:15:19,143 INFO o.a.j.s.SampleEvent: List of sample_variables: []
-2026-10-30 23:15:19,143 INFO o.a.j.s.SampleEvent: List of sample_variables: []
-2026-10-30 23:15:19,148 INFO o.a.j.e.u.CompoundVariable: Note: Function class names must contain the string: '.functions.'
-2026-10-30 23:15:19,148 INFO o.a.j.e.u.CompoundVariable: Note: Function class names must not contain the string: '.gui.'
-2026-10-30 23:15:19,243 INFO o.a.j.JMeter: Running test (1793402119243)
-2026-10-30 23:15:19,267 INFO o.a.j.e.StandardJMeterEngine: Starting ThreadGroup: 1 : Usuarios virtuales
-2026-10-30 23:15:19,267 INFO o.a.j.e.StandardJMeterEngine: Starting 80 threads for group Usuarios virtuales.
-2026-10-30 23:15:19,267 INFO o.a.j.e.StandardJMeterEngine: Thread will continue on error
-2026-10-30 23:15:19,268 INFO o.a.j.t.ThreadGroup: Starting thread group... number=1 threads=80 ramp-up=30 delayedStart=false
-2026-10-30 23:15:19,279 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-1
-2026-10-30 23:15:19,331 INFO o.a.j.t.ThreadGroup: Started thread group number 1
-2026-10-30 23:15:19,331 INFO o.a.j.e.StandardJMeterEngine: All thread groups have been started
-2026-10-30 23:15:19,636 INFO o.a.j.p.h.s.HTTPHCAbstractImpl: Local host = 09283f44d0b1
-2026-10-30 23:15:19,650 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-2
-2026-10-30 23:15:19,652 INFO o.a.j.p.h.s.HTTPHC4Impl: HTTP request retry count = 0
-2026-10-30 23:15:19,655 INFO o.a.j.s.SampleResult: Note: Sample TimeStamps are START times
-2026-10-30 23:15:19,655 INFO o.a.j.s.SampleResult: sampleresult.default.encoding is set to UTF-8
-2026-10-30 23:15:19,656 INFO o.a.j.s.SampleResult: sampleresult.useNanoTime=true
-2026-10-30 23:15:19,656 INFO o.a.j.s.SampleResult: sampleresult.nanoThreadSleep=5000
-2026-10-30 23:15:20,021 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-3
-2026-10-30 23:15:20,397 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-4
-2026-10-30 23:15:20,771 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-5
-2026-10-30 23:15:21,145 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-6
-2026-10-30 23:15:21,519 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-7
-2026-10-30 23:15:21,895 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-8
-2026-10-30 23:15:22,271 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-9
-2026-10-30 23:15:22,647 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-10
-2026-10-30 23:15:23,020 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-11
-2026-10-30 23:15:23,394 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-12
-2026-10-30 23:15:23,769 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-13
-2026-10-30 23:15:24,144 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-14
-2026-10-30 23:15:24,519 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-15
-2026-10-30 23:15:24,894 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-16
-2026-10-30 23:15:25,270 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-17
-2026-10-30 23:15:25,644 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-18
-2026-10-30 23:15:26,019 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-19
-2026-10-30 23:15:26,394 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-20
-2026-10-30 23:15:26,770 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-21
-2026-10-30 23:15:27,148 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-22
-2026-10-30 23:15:27,519 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-23
-2026-10-30 23:15:27,894 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-24
-2026-10-30 23:15:28,269 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-25
-2026-10-30 23:15:28,644 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-26
-2026-10-30 23:15:29,019 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-27
-2026-10-30 23:15:29,396 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-28
-2026-10-30 23:15:29,769 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-29
-2026-10-30 23:15:30,020 INFO o.a.j.r.Summariser: summary +    495 in 00:00:11 =   45.9/s Avg:    10 Min:     1 Max:   149 Err:     0 (0.00%) Active: 29 Started: 29 Finished: 0
-2026-10-30 23:15:30,145 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-30
-2026-10-30 23:15:30,520 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-31
-2026-10-30 23:15:30,896 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-32
-2026-10-30 23:15:31,269 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-33
-2026-10-30 23:15:31,644 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-34
-2026-10-30 23:15:32,018 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-35
-2026-10-30 23:15:32,394 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-36
-2026-10-30 23:15:32,768 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-37
-2026-10-30 23:15:33,145 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-38
-2026-10-30 23:15:33,519 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-39
-2026-10-30 23:15:33,894 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-40
-2026-10-30 23:15:34,270 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-41
-2026-10-30 23:15:34,644 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-42
-2026-10-30 23:15:35,019 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-43
-2026-10-30 23:15:35,394 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-44
-2026-10-30 23:15:35,772 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-45
-2026-10-30 23:15:36,143 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-46
-2026-10-30 23:15:36,519 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-47
-2026-10-30 23:15:36,893 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-48
-2026-10-30 23:15:37,271 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-49
-2026-10-30 23:15:37,643 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-50
-2026-10-30 23:15:38,019 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-51
-2026-10-30 23:15:38,394 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-52
-2026-10-30 23:15:38,769 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-53
-2026-10-30 23:15:39,144 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-54
-2026-10-30 23:15:39,520 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-55
-2026-10-30 23:15:39,894 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-56
-2026-10-30 23:15:40,269 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-57
-2026-10-30 23:15:40,646 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-58
-2026-10-30 23:15:41,040 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-59
-2026-10-30 23:15:41,394 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-60
-2026-10-30 23:15:41,769 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-61
-2026-10-30 23:15:42,145 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-62
-2026-10-30 23:15:42,520 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-63
-2026-10-30 23:15:42,901 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-64
-2026-10-30 23:15:43,269 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-65
-2026-10-30 23:15:43,643 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-66
-2026-10-30 23:15:44,022 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-67
-2026-10-30 23:15:44,393 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-68
-2026-10-30 23:15:44,769 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-69
-2026-10-30 23:15:45,144 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-70
-2026-10-30 23:15:45,519 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-71
-2026-10-30 23:15:45,894 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-72
-2026-10-30 23:15:46,268 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-73
-2026-10-30 23:15:46,644 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-74
-2026-10-30 23:15:47,018 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-75
-2026-10-30 23:15:47,396 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-76
-2026-10-30 23:15:47,770 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-77
-2026-10-30 23:15:48,143 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-78
-2026-10-30 23:15:48,520 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-79
-2026-10-30 23:15:48,896 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-80
-2026-10-30 23:16:00,004 INFO o.a.j.r.Summariser: summary +   6167 in 00:00:30 =  205.7/s Avg:     8 Min:     1 Max:   341 Err:     0 (0.00%) Active: 80 Started: 80 Finished: 0
-2026-10-30 23:16:00,005 INFO o.a.j.r.Summariser: summary =   6662 in 00:00:41 =  163.4/s Avg:     8 Min:     1 Max:   341 Err:     0 (0.00%)
-2026-10-30 23:16:28,993 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-8
-2026-10-30 23:16:29,004 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-7
-2026-10-30 23:16:29,004 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-6
-2026-10-30 23:16:29,014 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-33
-2026-10-30 23:16:29,017 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-1
-2026-10-30 23:16:29,040 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-14
-2026-10-30 23:16:29,040 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-9
-2026-10-30 23:16:29,047 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-24
-2026-10-30 23:16:29,050 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-71
-2026-10-30 23:16:29,050 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-57
-2026-10-30 23:16:29,053 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-53
-2026-10-30 23:16:29,061 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-55
-2026-10-30 23:16:29,066 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-72
-2026-10-30 23:16:29,068 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-66
-2026-10-30 23:16:29,069 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-63
-2026-10-30 23:16:29,075 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-27
-2026-10-30 23:16:29,075 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-35
-2026-10-30 23:16:29,086 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-10
-2026-10-30 23:16:29,087 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-2
-2026-10-30 23:16:29,092 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-56
-2026-10-30 23:16:29,094 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-70
-2026-10-30 23:16:29,095 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-20
-2026-10-30 23:16:29,097 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-31
-2026-10-30 23:16:29,097 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-41
-2026-10-30 23:16:29,099 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-49
-2026-10-30 23:16:29,099 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-43
-2026-10-30 23:16:29,102 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-4
-2026-10-30 23:16:29,103 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-38
-2026-10-30 23:16:29,106 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-26
-2026-10-30 23:16:29,106 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-29
-2026-10-30 23:16:29,107 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-69
-2026-10-30 23:16:29,109 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-75
-2026-10-30 23:16:29,109 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-51
-2026-10-30 23:16:29,110 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-16
-2026-10-30 23:16:29,113 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-3
-2026-10-30 23:16:29,114 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-30
-2026-10-30 23:16:29,117 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-22
-2026-10-30 23:16:29,120 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-68
-2026-10-30 23:16:29,124 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-61
-2026-10-30 23:16:29,124 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-32
-2026-10-30 23:16:29,128 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-15
-2026-10-30 23:16:29,128 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-39
-2026-10-30 23:16:29,136 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-58
-2026-10-30 23:16:29,140 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-48
-2026-10-30 23:16:29,140 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-12
-2026-10-30 23:16:29,141 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-17
-2026-10-30 23:16:29,143 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-52
-2026-10-30 23:16:29,143 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-36
-2026-10-30 23:16:29,146 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-74
-2026-10-30 23:16:29,157 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-21
-2026-10-30 23:16:29,164 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-44
-2026-10-30 23:16:29,171 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-47
-2026-10-30 23:16:29,172 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-34
-2026-10-30 23:16:29,173 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-76
-2026-10-30 23:16:29,175 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-67
-2026-10-30 23:16:29,175 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-37
-2026-10-30 23:16:29,179 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-23
-2026-10-30 23:16:29,179 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-45
-2026-10-30 23:16:29,194 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-60
-2026-10-30 23:16:29,201 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-19
-2026-10-30 23:16:29,212 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-11
-2026-10-30 23:16:29,222 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-25
-2026-10-30 23:16:29,223 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-64
-2026-10-30 23:16:29,228 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-54
-2026-10-30 23:16:29,234 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-62
-2026-10-30 23:16:29,234 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-46
-2026-10-30 23:16:29,234 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-50
-2026-10-30 23:16:29,238 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-5
-2026-10-30 23:16:29,241 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-13
-2026-10-30 23:16:29,277 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-28
-2026-10-30 23:16:29,281 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-42
-2026-10-30 23:16:29,283 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-77
-2026-10-30 23:16:29,284 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-79
-2026-10-30 23:16:29,293 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-73
-2026-10-30 23:16:29,297 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-80
-2026-10-30 23:16:29,297 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Usuarios virtuales 1-18
-2026-10-30 23:16:29,297 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-18
-2026-10-30 23:16:29,300 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-59
-2026-10-30 23:16:29,308 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-40
-2026-10-30 23:16:29,312 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-65
-2026-10-30 23:16:29,321 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-78
-2026-10-30 23:16:29,322 INFO o.a.j.e.StandardJMeterEngine: Notifying test listeners of end of test
-2026-10-30 23:16:29,323 INFO o.a.j.r.Summariser: summary +   7604 in 00:00:29 =  259.4/s Avg:     7 Min:     1 Max:   182 Err:     0 (0.00%) Active: 0 Started: 80 Finished: 80
-2026-10-30 23:16:29,324 INFO o.a.j.r.Summariser: summary =  14266 in 00:01:10 =  203.6/s Avg:     8 Min:     1 Max:   341 Err:     0 (0.00%)
-2026-10-30 23:16:29,326 INFO o.a.j.JMeter: Generating Dashboard
-2026-10-30 23:16:29,326 INFO o.a.j.r.d.ReportGenerator: Flushing result collector before report Generation
-2026-10-30 23:16:29,387 INFO o.a.j.r.p.NormalizerSampleConsumer: Using format, 'ms', to parse timeStamp field
-2026-10-30 23:16:29,939 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.AggregateConsumer#stopProducing(): beginDate produced 0 samples
-2026-10-30 23:16:29,939 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.AggregateConsumer#stopProducing(): endDate produced 0 samples
-2026-10-30 23:16:29,941 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.ApdexSummaryConsumer#stopProducing(): apdexSummary produced 0 samples
-2026-10-30 23:16:29,941 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.RequestsSummaryConsumer#stopProducing(): requestsSummary produced 0 samples
-2026-10-30 23:16:29,952 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.StatisticsSummaryConsumer#stopProducing(): statisticsSummary produced 0 samples
-2026-10-30 23:16:29,953 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.Top5ErrorsBySamplerConsumer#stopProducing(): top5ErrorsBySampler produced 0 samples
-2026-10-30 23:16:29,954 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.ErrorsSummaryConsumer#stopProducing(): errorsSummary produced 0 samples
-2026-10-30 23:16:29,954 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.HitsPerSecondGraphConsumer#stopProducing(): hitsPerSecond produced 0 samples
-2026-10-30 23:16:30,154 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.LatencyVSRequestGraphConsumer#stopProducing(): latencyVsRequest produced 0 samples
-2026-10-30 23:16:30,155 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.SyntheticResponseTimeDistributionGraphConsumer#stopProducing(): syntheticResponseTimeDistribution produced 0 samples
-2026-10-30 23:16:30,155 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.BytesThroughputGraphConsumer#stopProducing(): bytesThroughputOverTime produced 0 samples
-2026-10-30 23:16:30,155 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.CodesPerSecondGraphConsumer#stopProducing(): codesPerSecond produced 0 samples
-2026-10-30 23:16:30,261 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimeVSRequestGraphConsumer#stopProducing(): responseTimeVsRequest produced 0 samples
-2026-10-30 23:16:30,262 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.FilterConsumer#stopProducing(): startIntervalControlerFilter produced 99862 samples
-2026-10-30 23:16:30,262 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.TotalTPSGraphConsumer#stopProducing(): totalTPS produced 0 samples
-2026-10-30 23:16:30,262 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ActiveThreadsGraphConsumer#stopProducing(): activeThreadsOverTime produced 0 samples
-2026-10-30 23:16:30,262 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.TimeVSThreadGraphConsumer#stopProducing(): timeVsThreads produced 0 samples
-2026-10-30 23:16:30,262 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimeDistributionGraphConsumer#stopProducing(): responseTimeDistribution produced 0 samples
-2026-10-30 23:16:30,263 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.TransactionsPerSecondGraphConsumer#stopProducing(): transactionsPerSecond produced 0 samples
-2026-10-30 23:16:30,263 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimePercentilesGraphConsumer#stopProducing(): responseTimePercentiles produced 0 samples
-2026-10-30 23:16:30,265 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimePercentilesOverTimeGraphConsumer#stopProducing(): responseTimePercentilesOverTime produced 0 samples
-2026-10-30 23:16:30,266 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimeOverTimeGraphConsumer#stopProducing(): responseTimesOverTime produced 0 samples
-2026-10-30 23:16:30,266 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ConnectTimeOverTimeGraphConsumer#stopProducing(): connectTimeOverTime produced 0 samples
-2026-10-30 23:16:30,266 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.LatencyOverTimeGraphConsumer#stopProducing(): latenciesOverTime produced 0 samples
-2026-10-30 23:16:30,266 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.FilterConsumer#stopProducing(): nameFilter produced 213990 samples
-2026-10-30 23:16:30,266 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.FilterConsumer#stopProducing(): dateRangeFilter produced 42798 samples
-2026-10-30 23:16:30,266 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.NormalizerSampleConsumer#stopProducing(): normalizer produced 14266 samples
-2026-10-30 23:16:30,267 INFO o.a.j.r.p.CsvFileSampleSource: produce(): 14266 samples produced in 838ms on channel 0
-2026-10-30 23:16:30,267 INFO o.a.j.r.d.ReportGenerator: Exporting data using exporter:'json' of className:'org.apache.jmeter.report.dashboard.JsonExporter'
-2026-10-30 23:16:30,343 INFO o.a.j.r.d.JsonExporter: Found data for consumer statisticsSummary in context
-2026-10-30 23:16:30,343 INFO o.a.j.r.d.JsonExporter: Creating statistics for overall
-2026-10-30 23:16:30,343 INFO o.a.j.r.d.JsonExporter: Creating statistics for other transactions
-2026-10-30 23:16:30,344 INFO o.a.j.r.d.JsonExporter: Checking output folder
-2026-10-30 23:16:30,344 INFO o.a.j.r.d.JsonExporter: Writing statistics JSON to /test/resultados/reporte/statistics.json
-2026-10-30 23:16:30,382 INFO o.a.j.r.d.ReportGenerator: Exporting data using exporter:'html' of className:'org.apache.jmeter.report.dashboard.HtmlTemplateExporter'
-2026-10-30 23:16:30,384 INFO o.a.j.r.d.HtmlTemplateExporter: Will generate dashboard in folder: /test/resultados/reporte
-2026-10-30 23:16:30,529 INFO o.a.j.r.d.HtmlTemplateExporter: Report will be generated in: /test/resultados/reporte, creating folder structure
-2026-10-30 23:16:30,535 INFO o.a.j.r.d.TemplateVisitor: Copying folder from '/opt/apache-jmeter-5.6.3/bin/report-template' to '/test/resultados/reporte', got message: /test/resultados/reporte, found non empty folder with following content [/test/resultados/reporte/statistics.json], will be ignored
-2026-10-30 23:16:30,737 INFO o.a.j.JMeter: Dashboard generated
+2026-11-03 22:33:05,564 INFO o.a.j.u.JMeterUtils: Setting Locale to en_EN
+2026-11-03 22:33:05,598 INFO o.a.j.JMeter: Loading user properties from: /opt/apache-jmeter-5.6.3/bin/user.properties
+2026-11-03 22:33:05,598 INFO o.a.j.JMeter: Loading system properties from: /opt/apache-jmeter-5.6.3/bin/system.properties
+2026-11-03 22:33:05,599 INFO o.a.j.JMeter: Setting JMeter property: host=apigateway
+2026-11-03 22:33:05,599 INFO o.a.j.JMeter: Setting JMeter property: port=8080
+2026-11-03 22:33:05,599 INFO o.a.j.JMeter: Setting JMeter property: usuarios=80
+2026-11-03 22:33:05,599 INFO o.a.j.JMeter: Setting JMeter property: rampa=30
+2026-11-03 22:33:05,599 INFO o.a.j.JMeter: Setting JMeter property: duracion=70
+2026-11-03 22:33:05,599 INFO o.a.j.JMeter: Setting JMeter property: email=artesano@gmail.com
+2026-11-03 22:33:05,599 INFO o.a.j.JMeter: Setting JMeter property: password=123456
+2026-11-03 22:33:05,606 INFO o.a.j.JMeter: Copyright (c) 1998-2024 The Apache Software Foundation
+2026-11-03 22:33:05,606 INFO o.a.j.JMeter: Version 5.6.3
+2026-11-03 22:33:05,606 INFO o.a.j.JMeter: java.version=21.0.13
+2026-11-03 22:33:05,606 INFO o.a.j.JMeter: java.vm.name=OpenJDK 64-Bit Server VM
+2026-11-03 22:33:05,606 INFO o.a.j.JMeter: os.name=Linux
+2026-11-03 22:33:05,606 INFO o.a.j.JMeter: os.arch=amd64
+2026-11-03 22:33:05,606 INFO o.a.j.JMeter: os.version=6.12.113+deb13-amd64
+2026-11-03 22:33:05,606 INFO o.a.j.JMeter: file.encoding=UTF-8
+2026-11-03 22:33:05,606 INFO o.a.j.JMeter: java.awt.headless=true
+2026-11-03 22:33:05,606 INFO o.a.j.JMeter: Max memory     =1073741824
+2026-11-03 22:33:05,606 INFO o.a.j.JMeter: Available Processors =4
+2026-11-03 22:33:05,617 INFO o.a.j.JMeter: Default Locale=English (EN)
+2026-11-03 22:33:05,618 INFO o.a.j.JMeter: JMeter  Locale=English (EN)
+2026-11-03 22:33:05,618 INFO o.a.j.JMeter: JMeterHome=/opt/apache-jmeter-5.6.3
+2026-11-03 22:33:05,618 INFO o.a.j.JMeter: user.dir  =/test
+2026-11-03 22:33:05,618 INFO o.a.j.JMeter: PWD       =/test
+2026-11-03 22:33:05,618 INFO o.a.j.JMeter: IP: 172.18.0.14 Name: 8ae521e45b5f FullName: 8ae521e45b5f
+2026-11-03 22:33:05,635 INFO o.a.j.JMeter: Setting property 'jmeter.reportgenerator.outputdir' to:'/test/resultados/reporte'
+2026-11-03 22:33:05,642 INFO o.a.j.s.FileServer: Default base='/test'
+2026-11-03 22:33:05,644 INFO o.a.j.s.FileServer: Set new base='/test'
+2026-11-03 22:33:05,985 INFO o.a.j.s.SaveService: Testplan (JMX) version: 2.2. Testlog (JTL) version: 2.2
+2026-11-03 22:33:06,022 INFO o.a.j.s.SaveService: Using SaveService properties version 5.0
+2026-11-03 22:33:06,027 INFO o.a.j.s.SaveService: Using SaveService properties file encoding UTF-8
+2026-11-03 22:33:06,033 INFO o.a.j.s.SaveService: Loading file: /test/arteandino.jmx
+2026-11-03 22:33:06,132 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/html is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2026-11-03 22:33:06,133 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for application/xhtml+xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2026-11-03 22:33:06,133 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for application/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2026-11-03 22:33:06,133 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2026-11-03 22:33:06,133 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/vnd.wap.wml is org.apache.jmeter.protocol.http.parser.RegexpHTMLParser
+2026-11-03 22:33:06,135 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/css is org.apache.jmeter.protocol.http.parser.CssParser
+2026-11-03 22:33:06,166 INFO o.a.j.JMeter: Creating summariser <summary>
+2026-11-03 22:33:06,185 INFO o.a.j.r.d.ReportGenerator: ReportGenerator will use for Parsing the separator: ','
+2026-11-03 22:33:06,185 INFO o.a.j.r.d.ReportGenerator: Will generate report at end of test from  results file: /test/resultados/resultados.jtl
+2026-11-03 22:33:06,185 INFO o.a.j.r.d.ReportGenerator: Reading report generator properties from: /opt/apache-jmeter-5.6.3/bin/reportgenerator.properties
+2026-11-03 22:33:06,186 INFO o.a.j.r.d.ReportGenerator: Merging with JMeter properties
+2026-11-03 22:33:06,194 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.temp_dir' not found, using default value 'temp' instead.
+2026-11-03 22:33:06,199 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.apdex_per_transaction' not found, using default value 'null' instead.
+2026-11-03 22:33:06,199 INFO o.a.j.r.c.ReportGeneratorConfiguration: apdex_per_transaction is empty, not APDEX per transaction customization
+2026-11-03 22:33:06,199 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.sample_filter' not found, using default value 'null' instead.
+2026-11-03 22:33:06,199 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.report_title' not found, using default value 'null' instead.
+2026-11-03 22:33:06,199 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.start_date' not found, using default value 'null' instead.
+2026-11-03 22:33:06,199 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.end_date' not found, using default value 'null' instead.
+2026-11-03 22:33:06,199 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.date_format' not found, using default value 'null' instead.
+2026-11-03 22:33:06,200 INFO o.a.j.r.c.ReportGeneratorConfiguration: Will use date range start date: null, end date: null
+2026-11-03 22:33:06,205 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.totalTPS.exclude_controllers' not found, using default value 'false' instead.
+2026-11-03 22:33:06,206 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.activeThreadsOverTime.exclude_controllers' not found, using default value 'false' instead.
+2026-11-03 22:33:06,206 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.timeVsThreads.exclude_controllers' not found, using default value 'false' instead.
+2026-11-03 22:33:06,206 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.responseTimeDistribution.exclude_controllers' not found, using default value 'false' instead.
+2026-11-03 22:33:06,206 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.transactionsPerSecond.exclude_controllers' not found, using default value 'false' instead.
+2026-11-03 22:33:06,206 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.responseTimePercentiles.exclude_controllers' not found, using default value 'false' instead.
+2026-11-03 22:33:06,206 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.responseTimePercentilesOverTime.exclude_controllers' not found, using default value 'false' instead.
+2026-11-03 22:33:06,207 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.responseTimesOverTime.exclude_controllers' not found, using default value 'false' instead.
+2026-11-03 22:33:06,207 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.connectTimeOverTime.exclude_controllers' not found, using default value 'false' instead.
+2026-11-03 22:33:06,207 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.latenciesOverTime.exclude_controllers' not found, using default value 'false' instead.
+2026-11-03 22:33:06,208 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.json.filters_only_sample_series' not found, using default value 'true' instead.
+2026-11-03 22:33:06,208 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.json.series_filter' not found, using default value '' instead.
+2026-11-03 22:33:06,208 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.json.show_controllers_only' not found, using default value 'false' instead.
+2026-11-03 22:33:06,209 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.html.filters_only_sample_series' not found, using default value 'true' instead.
+2026-11-03 22:33:06,209 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.html.series_filter' not found, using default value '' instead.
+2026-11-03 22:33:06,209 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.html.show_controllers_only' not found, using default value 'false' instead.
+2026-11-03 22:33:06,227 INFO o.a.j.e.StandardJMeterEngine: Running the test!
+2026-11-03 22:33:06,228 INFO o.a.j.s.SampleEvent: List of sample_variables: []
+2026-11-03 22:33:06,229 INFO o.a.j.s.SampleEvent: List of sample_variables: []
+2026-11-03 22:33:06,244 INFO o.a.j.e.u.CompoundVariable: Note: Function class names must contain the string: '.functions.'
+2026-11-03 22:33:06,245 INFO o.a.j.e.u.CompoundVariable: Note: Function class names must not contain the string: '.gui.'
+2026-11-03 22:33:06,351 INFO o.a.j.JMeter: Running test (1793745186351)
+2026-11-03 22:33:06,376 INFO o.a.j.e.StandardJMeterEngine: Starting ThreadGroup: 1 : Usuarios virtuales
+2026-11-03 22:33:06,376 INFO o.a.j.e.StandardJMeterEngine: Starting 80 threads for group Usuarios virtuales.
+2026-11-03 22:33:06,376 INFO o.a.j.e.StandardJMeterEngine: Thread will continue on error
+2026-11-03 22:33:06,376 INFO o.a.j.t.ThreadGroup: Starting thread group... number=1 threads=80 ramp-up=30 delayedStart=false
+2026-11-03 22:33:06,388 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-1
+2026-11-03 22:33:06,486 INFO o.a.j.t.ThreadGroup: Started thread group number 1
+2026-11-03 22:33:06,486 INFO o.a.j.e.StandardJMeterEngine: All thread groups have been started
+2026-11-03 22:33:06,741 INFO o.a.j.p.h.s.HTTPHCAbstractImpl: Local host = 8ae521e45b5f
+2026-11-03 22:33:06,759 INFO o.a.j.p.h.s.HTTPHC4Impl: HTTP request retry count = 0
+2026-11-03 22:33:06,760 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-2
+2026-11-03 22:33:06,763 INFO o.a.j.s.SampleResult: Note: Sample TimeStamps are START times
+2026-11-03 22:33:06,764 INFO o.a.j.s.SampleResult: sampleresult.default.encoding is set to UTF-8
+2026-11-03 22:33:06,764 INFO o.a.j.s.SampleResult: sampleresult.useNanoTime=true
+2026-11-03 22:33:06,765 INFO o.a.j.s.SampleResult: sampleresult.nanoThreadSleep=5000
+2026-11-03 22:33:07,132 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-3
+2026-11-03 22:33:07,510 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-4
+2026-11-03 22:33:07,879 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-5
+2026-11-03 22:33:08,261 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-6
+2026-11-03 22:33:08,630 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-7
+2026-11-03 22:33:09,004 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-8
+2026-11-03 22:33:09,381 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-9
+2026-11-03 22:33:09,756 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-10
+2026-11-03 22:33:10,128 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-11
+2026-11-03 22:33:10,505 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-12
+2026-11-03 22:33:10,879 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-13
+2026-11-03 22:33:11,256 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-14
+2026-11-03 22:33:11,627 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-15
+2026-11-03 22:33:12,008 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-16
+2026-11-03 22:33:12,379 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-17
+2026-11-03 22:33:12,753 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-18
+2026-11-03 22:33:13,128 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-19
+2026-11-03 22:33:13,504 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-20
+2026-11-03 22:33:13,877 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-21
+2026-11-03 22:33:14,252 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-22
+2026-11-03 22:33:14,629 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-23
+2026-11-03 22:33:15,004 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-24
+2026-11-03 22:33:15,380 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-25
+2026-11-03 22:33:15,752 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-26
+2026-11-03 22:33:16,127 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-27
+2026-11-03 22:33:16,503 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-28
+2026-11-03 22:33:16,879 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-29
+2026-11-03 22:33:17,254 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-30
+2026-11-03 22:33:17,629 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-31
+2026-11-03 22:33:18,005 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-32
+2026-11-03 22:33:18,381 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-33
+2026-11-03 22:33:18,754 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-34
+2026-11-03 22:33:19,128 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-35
+2026-11-03 22:33:19,503 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-36
+2026-11-03 22:33:19,881 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-37
+2026-11-03 22:33:20,255 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-38
+2026-11-03 22:33:20,635 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-39
+2026-11-03 22:33:21,006 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-40
+2026-11-03 22:33:21,377 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-41
+2026-11-03 22:33:21,752 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-42
+2026-11-03 22:33:22,127 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-43
+2026-11-03 22:33:22,502 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-44
+2026-11-03 22:33:22,877 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-45
+2026-11-03 22:33:23,253 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-46
+2026-11-03 22:33:23,634 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-47
+2026-11-03 22:33:24,003 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-48
+2026-11-03 22:33:24,381 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-49
+2026-11-03 22:33:24,753 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-50
+2026-11-03 22:33:25,127 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-51
+2026-11-03 22:33:25,504 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-52
+2026-11-03 22:33:25,882 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-53
+2026-11-03 22:33:26,253 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-54
+2026-11-03 22:33:26,627 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-55
+2026-11-03 22:33:27,002 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-56
+2026-11-03 22:33:27,376 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-57
+2026-11-03 22:33:27,752 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-58
+2026-11-03 22:33:28,129 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-59
+2026-11-03 22:33:28,505 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-60
+2026-11-03 22:33:28,877 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-61
+2026-11-03 22:33:29,255 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-62
+2026-11-03 22:33:29,634 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-63
+2026-11-03 22:33:30,005 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-64
+2026-11-03 22:33:30,030 INFO o.a.j.r.Summariser: summary +   1848 in 00:00:24 =   78.1/s Avg:    98 Min:     5 Max:  1305 Err:     0 (0.00%) Active: 64 Started: 64 Finished: 0
+2026-11-03 22:33:30,380 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-65
+2026-11-03 22:33:30,754 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-66
+2026-11-03 22:33:31,128 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-67
+2026-11-03 22:33:31,505 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-68
+2026-11-03 22:33:31,882 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-69
+2026-11-03 22:33:32,255 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-70
+2026-11-03 22:33:32,631 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-71
+2026-11-03 22:33:33,003 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-72
+2026-11-03 22:33:33,385 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-73
+2026-11-03 22:33:33,755 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-74
+2026-11-03 22:33:34,128 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-75
+2026-11-03 22:33:34,505 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-76
+2026-11-03 22:33:34,877 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-77
+2026-11-03 22:33:35,254 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-78
+2026-11-03 22:33:35,628 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-79
+2026-11-03 22:33:36,002 INFO o.a.j.t.JMeterThread: Thread started: Usuarios virtuales 1-80
+2026-11-03 22:34:00,013 INFO o.a.j.r.Summariser: summary +   6379 in 00:00:30 =  212.7/s Avg:    66 Min:     2 Max:  1098 Err:     0 (0.00%) Active: 80 Started: 80 Finished: 0
+2026-11-03 22:34:00,018 INFO o.a.j.r.Summariser: summary =   8227 in 00:00:54 =  153.3/s Avg:    74 Min:     2 Max:  1305 Err:     0 (0.00%)
+2026-11-03 22:34:16,179 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-12
+2026-11-03 22:34:16,181 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-24
+2026-11-03 22:34:16,184 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-73
+2026-11-03 22:34:16,186 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-42
+2026-11-03 22:34:16,194 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-10
+2026-11-03 22:34:16,194 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-53
+2026-11-03 22:34:16,201 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-60
+2026-11-03 22:34:16,204 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-28
+2026-11-03 22:34:16,206 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-50
+2026-11-03 22:34:16,211 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-52
+2026-11-03 22:34:16,224 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-17
+2026-11-03 22:34:16,228 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-34
+2026-11-03 22:34:16,232 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-25
+2026-11-03 22:34:16,234 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-29
+2026-11-03 22:34:16,236 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-38
+2026-11-03 22:34:16,238 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-3
+2026-11-03 22:34:16,242 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-43
+2026-11-03 22:34:16,245 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-11
+2026-11-03 22:34:16,254 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-6
+2026-11-03 22:34:16,256 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-74
+2026-11-03 22:34:16,258 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-76
+2026-11-03 22:34:16,262 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-27
+2026-11-03 22:34:16,263 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-54
+2026-11-03 22:34:16,266 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-9
+2026-11-03 22:34:16,271 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-5
+2026-11-03 22:34:16,276 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-46
+2026-11-03 22:34:16,277 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-48
+2026-11-03 22:34:16,278 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-51
+2026-11-03 22:34:16,281 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-49
+2026-11-03 22:34:16,287 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-30
+2026-11-03 22:34:16,288 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-57
+2026-11-03 22:34:16,289 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-58
+2026-11-03 22:34:16,303 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-44
+2026-11-03 22:34:16,305 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-55
+2026-11-03 22:34:16,306 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-21
+2026-11-03 22:34:16,306 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-2
+2026-11-03 22:34:16,308 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-35
+2026-11-03 22:34:16,309 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-33
+2026-11-03 22:34:16,314 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-71
+2026-11-03 22:34:16,318 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-18
+2026-11-03 22:34:16,318 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-69
+2026-11-03 22:34:16,321 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-20
+2026-11-03 22:34:16,323 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-45
+2026-11-03 22:34:16,325 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-4
+2026-11-03 22:34:16,325 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-8
+2026-11-03 22:34:16,326 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-1
+2026-11-03 22:34:16,326 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-40
+2026-11-03 22:34:16,327 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-19
+2026-11-03 22:34:16,330 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-7
+2026-11-03 22:34:16,333 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-23
+2026-11-03 22:34:16,335 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-41
+2026-11-03 22:34:16,337 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-68
+2026-11-03 22:34:16,343 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-36
+2026-11-03 22:34:16,346 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-26
+2026-11-03 22:34:16,349 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-37
+2026-11-03 22:34:16,350 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-65
+2026-11-03 22:34:16,350 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-13
+2026-11-03 22:34:16,355 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-16
+2026-11-03 22:34:16,377 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-70
+2026-11-03 22:34:16,377 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-62
+2026-11-03 22:34:16,378 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-77
+2026-11-03 22:34:16,378 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-15
+2026-11-03 22:34:16,383 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-31
+2026-11-03 22:34:16,390 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-56
+2026-11-03 22:34:16,392 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-59
+2026-11-03 22:34:16,401 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-47
+2026-11-03 22:34:16,402 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-22
+2026-11-03 22:34:16,404 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-78
+2026-11-03 22:34:16,422 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-72
+2026-11-03 22:34:16,422 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-14
+2026-11-03 22:34:16,425 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-75
+2026-11-03 22:34:16,427 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-61
+2026-11-03 22:34:16,430 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-64
+2026-11-03 22:34:16,430 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-32
+2026-11-03 22:34:16,432 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-39
+2026-11-03 22:34:16,442 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-63
+2026-11-03 22:34:16,448 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-66
+2026-11-03 22:34:16,476 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Usuarios virtuales 1-67
+2026-11-03 22:34:16,476 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-67
+2026-11-03 22:34:16,480 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-80
+2026-11-03 22:34:16,482 INFO o.a.j.t.JMeterThread: Thread finished: Usuarios virtuales 1-79
+2026-11-03 22:34:16,482 INFO o.a.j.e.StandardJMeterEngine: Notifying test listeners of end of test
+2026-11-03 22:34:16,483 INFO o.a.j.r.Summariser: summary +   4175 in 00:00:16 =  253.5/s Avg:    15 Min:     1 Max:   303 Err:     0 (0.00%) Active: 0 Started: 80 Finished: 80
+2026-11-03 22:34:16,483 INFO o.a.j.r.Summariser: summary =  12402 in 00:01:10 =  176.8/s Avg:    54 Min:     1 Max:  1305 Err:     0 (0.00%)
+2026-11-03 22:34:16,484 INFO o.a.j.JMeter: Generating Dashboard
+2026-11-03 22:34:16,484 INFO o.a.j.r.d.ReportGenerator: Flushing result collector before report Generation
+2026-11-03 22:34:16,515 INFO o.a.j.r.p.NormalizerSampleConsumer: Using format, 'ms', to parse timeStamp field
+2026-11-03 22:34:17,157 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.AggregateConsumer#stopProducing(): beginDate produced 0 samples
+2026-11-03 22:34:17,158 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.AggregateConsumer#stopProducing(): endDate produced 0 samples
+2026-11-03 22:34:17,165 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.ApdexSummaryConsumer#stopProducing(): apdexSummary produced 0 samples
+2026-11-03 22:34:17,165 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.RequestsSummaryConsumer#stopProducing(): requestsSummary produced 0 samples
+2026-11-03 22:34:17,175 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.StatisticsSummaryConsumer#stopProducing(): statisticsSummary produced 0 samples
+2026-11-03 22:34:17,177 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.Top5ErrorsBySamplerConsumer#stopProducing(): top5ErrorsBySampler produced 0 samples
+2026-11-03 22:34:17,177 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.ErrorsSummaryConsumer#stopProducing(): errorsSummary produced 0 samples
+2026-11-03 22:34:17,177 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.HitsPerSecondGraphConsumer#stopProducing(): hitsPerSecond produced 0 samples
+2026-11-03 22:34:17,352 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.LatencyVSRequestGraphConsumer#stopProducing(): latencyVsRequest produced 0 samples
+2026-11-03 22:34:17,354 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.SyntheticResponseTimeDistributionGraphConsumer#stopProducing(): syntheticResponseTimeDistribution produced 0 samples
+2026-11-03 22:34:17,354 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.BytesThroughputGraphConsumer#stopProducing(): bytesThroughputOverTime produced 0 samples
+2026-11-03 22:34:17,354 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.CodesPerSecondGraphConsumer#stopProducing(): codesPerSecond produced 0 samples
+2026-11-03 22:34:17,450 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimeVSRequestGraphConsumer#stopProducing(): responseTimeVsRequest produced 0 samples
+2026-11-03 22:34:17,451 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.FilterConsumer#stopProducing(): startIntervalControlerFilter produced 86814 samples
+2026-11-03 22:34:17,451 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.TotalTPSGraphConsumer#stopProducing(): totalTPS produced 0 samples
+2026-11-03 22:34:17,451 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ActiveThreadsGraphConsumer#stopProducing(): activeThreadsOverTime produced 0 samples
+2026-11-03 22:34:17,452 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.TimeVSThreadGraphConsumer#stopProducing(): timeVsThreads produced 0 samples
+2026-11-03 22:34:17,452 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimeDistributionGraphConsumer#stopProducing(): responseTimeDistribution produced 0 samples
+2026-11-03 22:34:17,452 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.TransactionsPerSecondGraphConsumer#stopProducing(): transactionsPerSecond produced 0 samples
+2026-11-03 22:34:17,452 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimePercentilesGraphConsumer#stopProducing(): responseTimePercentiles produced 0 samples
+2026-11-03 22:34:17,455 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimePercentilesOverTimeGraphConsumer#stopProducing(): responseTimePercentilesOverTime produced 0 samples
+2026-11-03 22:34:17,457 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimeOverTimeGraphConsumer#stopProducing(): responseTimesOverTime produced 0 samples
+2026-11-03 22:34:17,457 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ConnectTimeOverTimeGraphConsumer#stopProducing(): connectTimeOverTime produced 0 samples
+2026-11-03 22:34:17,457 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.LatencyOverTimeGraphConsumer#stopProducing(): latenciesOverTime produced 0 samples
+2026-11-03 22:34:17,457 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.FilterConsumer#stopProducing(): nameFilter produced 186030 samples
+2026-11-03 22:34:17,457 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.FilterConsumer#stopProducing(): dateRangeFilter produced 37206 samples
+2026-11-03 22:34:17,457 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.NormalizerSampleConsumer#stopProducing(): normalizer produced 12402 samples
+2026-11-03 22:34:17,458 INFO o.a.j.r.p.CsvFileSampleSource: produce(): 12402 samples produced in 907ms on channel 0
+2026-11-03 22:34:17,458 INFO o.a.j.r.d.ReportGenerator: Exporting data using exporter:'json' of className:'org.apache.jmeter.report.dashboard.JsonExporter'
+2026-11-03 22:34:17,550 INFO o.a.j.r.d.JsonExporter: Found data for consumer statisticsSummary in context
+2026-11-03 22:34:17,550 INFO o.a.j.r.d.JsonExporter: Creating statistics for overall
+2026-11-03 22:34:17,550 INFO o.a.j.r.d.JsonExporter: Creating statistics for other transactions
+2026-11-03 22:34:17,550 INFO o.a.j.r.d.JsonExporter: Checking output folder
+2026-11-03 22:34:17,551 INFO o.a.j.r.d.JsonExporter: Writing statistics JSON to /test/resultados/reporte/statistics.json
+2026-11-03 22:34:17,587 INFO o.a.j.r.d.ReportGenerator: Exporting data using exporter:'html' of className:'org.apache.jmeter.report.dashboard.HtmlTemplateExporter'
+2026-11-03 22:34:17,590 INFO o.a.j.r.d.HtmlTemplateExporter: Will generate dashboard in folder: /test/resultados/reporte
+2026-11-03 22:34:17,713 INFO o.a.j.r.d.HtmlTemplateExporter: Report will be generated in: /test/resultados/reporte, creating folder structure
+2026-11-03 22:34:17,717 INFO o.a.j.r.d.TemplateVisitor: Copying folder from '/opt/apache-jmeter-5.6.3/bin/report-template' to '/test/resultados/reporte', got message: /test/resultados/reporte, found non empty folder with following content [/test/resultados/reporte/statistics.json], will be ignored
+2026-11-03 22:34:17,936 INFO o.a.j.JMeter: Dashboard generated

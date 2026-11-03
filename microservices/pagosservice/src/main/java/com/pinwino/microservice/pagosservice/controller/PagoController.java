@@ -41,7 +41,8 @@ public class PagoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(pago);
     }
 
-    @PostMapping("/{id}/estado")
+    // PATCH (frontend y Feign) y POST: ambos válidos para evitar el error 405
+    @RequestMapping(value = "/{id}/estado", method = {RequestMethod.PATCH, RequestMethod.POST})
     public ResponseEntity<Pago> actualizarEstado(
             @PathVariable Long id,
             @RequestParam EstadoPago estado,

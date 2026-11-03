@@ -48,7 +48,7 @@ services:
     depends_on:
       - configserver
     ports:
-      - "8761:8761"
+      - "127.0.0.1:8761:8761"
     networks:
       - eccomerce-net
 
