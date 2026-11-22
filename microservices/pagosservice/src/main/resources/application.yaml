@@ -3,3 +3,6 @@ spring:
     name: pagosservice
   config:
     import: "optional:configserver:http://configserver:8888"
+eureka:
+  instance:
+    prefer-ip-address: true

@@ -20,15 +20,20 @@ import com.pinwino.microservices.ventasservice.repository.PedidoRepository;
 import com.pinwino.microservices.ventasservice.service.PedidoService;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PedidoServiceImpl implements PedidoService {
 
     private final PedidoRepository pedidoRepository;
@@ -55,39 +60,35 @@ public class PedidoServiceImpl implements PedidoService {
     @Transactional(readOnly = true)
     public List<Pedido> listarPorEstado(EstadoPedido estado) { return pedidoRepository.findByEstado(estado); }
 
+    /**
+     * Optimizado contra N+1 HTTP: realiza UNA sola llamada a productosservice
+     * para obtener los IDs de productos del artesano y luego filtra en memoria O(1).
+     */
     @Override
     @Transactional(readOnly = true)
     public List<Pedido> listarPorArtesano(Long artesanoId) {
+        Set<Long> productosDelArtesano;
+        try {
+            List<ProductoDTO> productos = productoClient.listarPorArtesano(artesanoId);
+            if (productos == null || productos.isEmpty()) {
+                return Collections.emptyList();
+            }
+            productosDelArtesano = productos.stream()
+                    .map(ProductoDTO::getId)
+                    .collect(Collectors.toSet());
+        } catch (FeignException ex) {
+            log.warn("No se pudieron consultar los productos del artesano {}: {}", artesanoId, ex.getMessage());
+            return Collections.emptyList();
+        }
 
-        // Revisamos todos los pedidos registrados.
         return pedidoRepository.findAll()
                 .stream()
-
-                // Dejamos solo los pedidos que tengan al menos
-                // un producto perteneciente al artesano.
                 .filter(pedido -> pedido.getDetalles()
                         .stream()
-                        .anyMatch(detalle -> {
-
-                            try {
-                                // Consultamos el producto usando su ID.
-                                ProductoDTO producto =
-                                        productoClient.buscarPorId(detalle.getProductoId());
-
-                                // Comparamos el artesano del producto
-                                // con el artesano que estamos buscando.
-                                return producto.getArtesanoId() != null
-                                        && producto.getArtesanoId().equals(artesanoId);
-
-                            } catch (FeignException ex) {
-                                // Si no se puede consultar un producto,
-                                // ese detalle no se toma en cuenta.
-                                return false;
-                            }
-                        }))
+                        .anyMatch(detalle -> productosDelArtesano.contains(detalle.getProductoId())))
                 .toList();
     }
-    
+
     @Override
     @Transactional(readOnly = true)
     public Pedido buscarPorId(Long id) {

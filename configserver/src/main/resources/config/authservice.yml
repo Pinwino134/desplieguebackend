@@ -7,14 +7,14 @@ server:
   port: 8091
 spring:
   datasource:
-    url: jdbc:postgresql://postgres:5432/authdb
-    username: postgres
-    password: 1234
+    url: jdbc:postgresql://${DB_HOST:postgres}:5432/authdb
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:1234}
     driver-class-name: org.postgresql.Driver
   jpa:
-    hibernate:  
+    hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 jwt:
-  secret: "c2FtcGxlLXNlY3JldC1jYW1iaWFyLWVuLXByb2R1Y2Npb24tZWNjb21lcmNlLXBpbndpbm8tMjAyNg=="
-  expiration-ms: 86400000
+  secret: "${JWT_SECRET:c2FtcGxlLXNlY3JldC1jYW1iaWFyLWVuLXByb2R1Y2Npb24tZWNjb21lcmNlLXBpbndpbm8tMjAyNg==}"
+  expiration-ms: ${JWT_EXPIRATION_MS:86400000}

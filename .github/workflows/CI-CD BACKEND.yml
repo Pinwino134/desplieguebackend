@@ -1,29 +1,21 @@
-# Ubicación: desplieguebackend/.github/workflows/ci-cd.yml
+# CI/CD Backend — Integración Continua, Control de Cambios y Despliegue (Avance 03)
 #
-# CI/CD del backend de microservicios:
-#   1. compilar  -> Maven (reactor + api gateway), sube los .jar como artefacto
-#   2. imagenes  -> construye las 9 imágenes Docker en paralelo (matriz) con caché
-#   3. deploy    -> solo en main: entra por SSH a la VM de Oracle, actualiza y
-#                   levanta con docker compose; luego prueba que el gateway responda
-#
-# Secrets necesarios (Settings > Secrets and variables > Actions):
-#   ORACLE_HOST      IP o dominio de la VM
-#   ORACLE_USER      usuario SSH (ej. ubuntu u opc)
-#   ORACLE_SSH_KEY   clave privada SSH completa (la que NO tiene passphrase)
-# Variable opcional:
-#   ORACLE_APP_DIR   carpeta del proyecto en la VM (por defecto ~/desplieguebackend)
+# Etapas:
+#   1. pruebas-y-compilacion -> Ejecuta pruebas unitarias/seguridad (SIN -DskipTests) y empaqueta JARs
+#   2. imagenes              -> Construye las 10 imágenes Docker endurecidas (incluye serviciosservice)
+#   3. validar-compose       -> Verifica sintaxis de docker-compose.yml y configuración de Prometheus
+#   4. deploy                -> Solo en push a main: despliega en Oracle Cloud y ejecuta smoke tests
+#                               (healthchecks + rutas públicas + verificación 401 en rutas protegidas)
 
 name: CI/CD Backend
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
-    branches: [main]
+    branches: [main, develop]
   workflow_dispatch:
 
-# Si llega un push nuevo, se cancela la corrida anterior de la misma rama.
-# (El job de deploy tiene su propia regla para NO cancelarse a mitad.)
 concurrency:
   group: backend-${{ github.ref }}
   cancel-in-progress: true
@@ -33,12 +25,12 @@ permissions:
 
 jobs:
   # ------------------------------------------------------------------
-  # 1) Compilar con Maven
+  # 1) Pruebas automatizadas RF/Seguridad y Compilación (Maven)
   # ------------------------------------------------------------------
   compilar:
-    name: Compilar (Maven)
+    name: Pruebas y Compilación (Maven)
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
 
@@ -48,13 +40,21 @@ jobs:
           java-version: 25
           cache: maven
 
-      # configserver, discoveryserver y los 6 microservicios
-      - name: Compilar reactor
-        run: mvn -B -ntp package -DskipTests
+      # configserver, discoveryserver y los 7 microservicios (ejecutando pruebas reales)
+      - name: Ejecutar tests y empaquetar reactor
+        run: mvn -B -ntp test package -Dmaven.test.skip=false
 
-      # El gateway NO está en el reactor (tiene su propio pom)
-      - name: Compilar api gateway
-        run: mvn -B -ntp -f apigateway/pom.xml package -DskipTests
+      # API Gateway (pruebas de JWT, RBAC, Rate Limit y cabeceras OWASP)
+      - name: Ejecutar tests y empaquetar API Gateway
+        run: mvn -B -ntp -f apigateway/pom.xml test package -Dmaven.test.skip=false
+
+      - name: Publicar reportes Surefire
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports-backend
+          path: "**/target/surefire-reports/*.xml"
+          retention-days: 7
 
       - name: Subir jars
         uses: actions/upload-artifact@v4
@@ -66,7 +66,7 @@ jobs:
           retention-days: 3
 
   # ------------------------------------------------------------------
-  # 2) Construir las imágenes Docker (una por servicio, en paralelo)
+  # 2) Construir las 10 imágenes Docker en paralelo
   # ------------------------------------------------------------------
   imagenes:
     name: Imagen ${{ matrix.servicio }}
@@ -86,12 +86,10 @@ jobs:
           - { servicio: pagosservice,     dockerfile: microservices/pagosservice/Dockerfile }
           - { servicio: logisticaservice, dockerfile: microservices/logisticaservice/Dockerfile }
           - { servicio: gerenciaservice,  dockerfile: microservices/gerenciaservice/Dockerfile }
+          - { servicio: serviciosservice, dockerfile: microservices/serviciosservice/Dockerfile }
     steps:
       - uses: actions/checkout@v4
-
       - uses: docker/setup-buildx-action@v3
-
-      # El contexto es la RAÍZ del repo (igual que en el docker-compose.yml)
       - name: Construir imagen (sin publicar)
         uses: docker/build-push-action@v6
         with:
@@ -103,18 +101,19 @@ jobs:
           cache-to: type=gha,mode=max,scope=${{ matrix.servicio }}
 
   # ------------------------------------------------------------------
-  # Valida que el docker-compose.yml sea correcto
+  # 3) Validación de infraestructura y control de cambios
   # ------------------------------------------------------------------
   validar-compose:
-    name: Validar docker-compose
+    name: Validar docker-compose y observabilidad
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
       - run: docker compose config -q
+      - run: docker compose --profile monitoring config -q
 
   # ------------------------------------------------------------------
-  # 3) Desplegar en Oracle Cloud (solo push a main o ejecución manual en main)
+  # 4) Despliegue en Oracle Cloud + Smoke Tests (solo push a main)
   # ------------------------------------------------------------------
   deploy:
     name: Desplegar en Oracle Cloud
@@ -152,19 +151,22 @@ jobs:
           docker compose ps
           EOF
 
-      # Espera hasta 5 minutos a que el gateway responda (ruta pública)
-      - name: Prueba de humo
+      - name: Pruebas de humo (disponibilidad + seguridad)
         run: |
           for i in $(seq 1 30); do
-            codigo=$(curl -s -o /dev/null -w '%{http_code}' "http://$HOST:8080/api/v1/categorias" || true)
-            echo "Intento $i: HTTP $codigo"
-            if [ "$codigo" = "200" ]; then
+            codigo_pub=$(curl -s -o /dev/null -w '%{http_code}' "http://$HOST:8080/api/v1/categorias" || true)
+            codigo_health=$(curl -s -o /dev/null -w '%{http_code}' "http://$HOST:8080/actuator/health" || true)
+            codigo_priv=$(curl -s -o /dev/null -w '%{http_code}' "http://$HOST:8080/api/v1/solicitudes" || true)
+            echo "Intento $i: /categorias=$codigo_pub | /actuator/health=$codigo_health | /solicitudes(sin token)=$codigo_priv"
+            if [ "$codigo_pub" = "200" ] && [ "$codigo_health" = "200" ] && [ "$codigo_priv" = "401" ]; then
               echo "### Deploy OK :rocket:" >> "$GITHUB_STEP_SUMMARY"
-              echo "Gateway respondiendo en http://$HOST:8080" >> "$GITHUB_STEP_SUMMARY"
+              echo "- Gateway activo en http://$HOST:8080" >> "$GITHUB_STEP_SUMMARY"
+              echo "- Healthcheck Actuator: HTTP 200" >> "$GITHUB_STEP_SUMMARY"
+              echo "- Verificación RBAC/JWT sin token: HTTP 401" >> "$GITHUB_STEP_SUMMARY"
               exit 0
             fi
             sleep 10
           done
           echo "### Deploy con problemas :x:" >> "$GITHUB_STEP_SUMMARY"
-          echo "El gateway no respondió HTTP 200 en 5 minutos." >> "$GITHUB_STEP_SUMMARY"
+          echo "El gateway no superó las pruebas de humo en 5 minutos." >> "$GITHUB_STEP_SUMMARY"
           exit 1

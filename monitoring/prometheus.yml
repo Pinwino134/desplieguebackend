@@ -1,0 +1,18 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'arteandino-microservices'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets:
+          - 'apigateway:8080'
+          - 'discoveryserver:8761'
+          - 'authservice:8091'
+          - 'gerenciaservice:8092'
+          - 'logisticaservice:8093'
+          - 'pagosservice:8094'
+          - 'productosservice:8095'
+          - 'ventasservice:8096'
+          - 'serviciosservice:8097'
