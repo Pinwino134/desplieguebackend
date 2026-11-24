@@ -28,18 +28,49 @@ public class SolicitudServiceImpl implements SolicitudService {
         if (solicitud.getTipo() == null) {
             solicitud.setTipo(TipoSolicitud.SERVICIO);
         }
-        if (solicitud.getPrioridad() == null) {
+
+        // Priorización formal ITIL: si vienen Impacto y Urgencia, aplicamos la Matriz Impacto × Urgencia.
+        if (solicitud.getImpacto() != null && solicitud.getUrgencia() != null) {
+            solicitud.setPrioridad(PrioridadSolicitud.calcularPorMatriz(solicitud.getImpacto(), solicitud.getUrgencia()));
+        } else if (solicitud.getPrioridad() == null) {
             solicitud.setPrioridad(PrioridadSolicitud.MEDIA);
         }
+
+        if (solicitud.getImpacto() == null) {
+            solicitud.setImpacto(switch (solicitud.getPrioridad()) {
+                case CRITICA, ALTA -> NivelImpacto.ALTO;
+                case MEDIA -> NivelImpacto.MEDIO;
+                case BAJA -> NivelImpacto.BAJO;
+            });
+        }
+        if (solicitud.getUrgencia() == null) {
+            solicitud.setUrgencia(switch (solicitud.getPrioridad()) {
+                case CRITICA, ALTA -> NivelUrgencia.ALTA;
+                case MEDIA -> NivelUrgencia.MEDIA;
+                case BAJA -> NivelUrgencia.BAJA;
+            });
+        }
+
         if (solicitud.getTipo() == TipoSolicitud.ACCESO
                 && (solicitud.getRolSolicitado() == null || solicitud.getRolSolicitado().isBlank())) {
             throw new BusinessException("En solicitudes de acceso debes especificar el rol o permiso solicitado");
         }
 
+        // Nivel inicial de escalamiento: P1 entra directo a N2_ADMINISTRADOR, el resto inicia en N1_MESA_SERVICIO.
+        if (solicitud.getNivelEscalamiento() == null) {
+            solicitud.setNivelEscalamiento(
+                    solicitud.getPrioridad() == PrioridadSolicitud.CRITICA
+                            ? NivelEscalamiento.N2_ADMINISTRADOR
+                            : NivelEscalamiento.N1_MESA_SERVICIO
+            );
+        }
+
         LocalDateTime ahora = LocalDateTime.now();
         solicitud.setEstado(EstadoSolicitud.ABIERTA);
         solicitud.setCodigo(generarCodigo(solicitud.getTipo()));
+        solicitud.setFechaLimiteRespuestaSla(ahora.plusMinutes(solicitud.getPrioridad().getMinutosRespuestaSla()));
         solicitud.setFechaLimiteSla(ahora.plusHours(solicitud.getPrioridad().getHorasSla()));
+        solicitud.setSlaRespuestaCumplido(null);
         solicitud.setSlaCumplido(null);
 
         Solicitud guardada = solicitudRepository.save(solicitud);
@@ -48,10 +79,12 @@ public class SolicitudServiceImpl implements SolicitudService {
                 .usuarioId(guardada.getUsuarioId())
                 .usuarioEmail(guardada.getSolicitanteEmail())
                 .usuarioRol(guardada.getSolicitanteRol() != null ? guardada.getSolicitanteRol() : "PUBLICO")
-                .modulo("GESTION_SERVICIOS")
-                .accion("CREAR_SOLICITUD_" + guardada.getTipo().name())
+                .modulo(guardada.getTipo() == TipoSolicitud.INCIDENTE ? "GESTION_INCIDENTES" : "GESTION_SERVICIOS")
+                .accion("CREAR_" + guardada.getTipo().name())
                 .recurso("solicitud/" + guardada.getCodigo())
-                .detalle("Asunto: " + guardada.getAsunto() + " | Prioridad: " + guardada.getPrioridad())
+                .detalle("Asunto: " + guardada.getAsunto()
+                        + " | Prioridad: " + guardada.getPrioridad().getCodigoNivel() + " (" + guardada.getPrioridad() + ")"
+                        + " | Escalamiento: " + guardada.getNivelEscalamiento())
                 .resultado("EXITO")
                 .ipOrigen(ipOrigen)
                 .correlationId(correlationId)
@@ -107,6 +140,7 @@ public class SolicitudServiceImpl implements SolicitudService {
         if (solicitud.getEstado() == EstadoSolicitud.ABIERTA) {
             solicitud.setEstado(EstadoSolicitud.EN_PROCESO);
         }
+        registrarPrimeraRespuestaSiFalta(solicitud);
 
         Solicitud actualizada = solicitudRepository.save(solicitud);
 
@@ -114,10 +148,47 @@ public class SolicitudServiceImpl implements SolicitudService {
                 .usuarioId(actorId)
                 .usuarioEmail(actorEmail)
                 .usuarioRol(actorRol)
-                .modulo("GESTION_SERVICIOS")
-                .accion("ASIGNAR_SOLICITUD")
+                .modulo(actualizada.getTipo() == TipoSolicitud.INCIDENTE ? "GESTION_INCIDENTES" : "GESTION_SERVICIOS")
+                .accion("ASIGNAR_TICKET")
                 .recurso("solicitud/" + actualizada.getCodigo())
-                .detalle("Asignada a: " + actualizada.getAsignadoNombre())
+                .detalle("Asignado a: " + actualizada.getAsignadoNombre() + " | Nivel: " + actualizada.getNivelEscalamiento())
+                .resultado("EXITO")
+                .correlationId(correlationId)
+                .build());
+
+        return actualizada;
+    }
+
+    @Override
+    @Transactional
+    public Solicitud escalar(
+            Long id,
+            NivelEscalamiento nuevoNivel,
+            String motivo,
+            Long actorId,
+            String actorEmail,
+            String actorRol,
+            String correlationId) {
+
+        Solicitud solicitud = buscarPorId(id);
+        NivelEscalamiento nivelAnterior = solicitud.getNivelEscalamiento();
+        solicitud.setNivelEscalamiento(nuevoNivel);
+        if (solicitud.getEstado() == EstadoSolicitud.ABIERTA) {
+            solicitud.setEstado(EstadoSolicitud.EN_PROCESO);
+        }
+        registrarPrimeraRespuestaSiFalta(solicitud);
+
+        Solicitud actualizada = solicitudRepository.save(solicitud);
+
+        auditoriaService.registrar(RegistroAuditoria.builder()
+                .usuarioId(actorId)
+                .usuarioEmail(actorEmail)
+                .usuarioRol(actorRol)
+                .modulo("GESTION_INCIDENTES")
+                .accion("ESCALAR_" + nuevoNivel.name())
+                .recurso("solicitud/" + actualizada.getCodigo())
+                .detalle("Escalamiento " + nivelAnterior + " -> " + nuevoNivel
+                        + (motivo != null && !motivo.isBlank() ? " | Motivo: " + motivo.trim() : ""))
                 .resultado("EXITO")
                 .correlationId(correlationId)
                 .build());
@@ -131,6 +202,8 @@ public class SolicitudServiceImpl implements SolicitudService {
             Long id,
             EstadoSolicitud nuevoEstado,
             String respuesta,
+            String solucionTemporal,
+            String causaRaiz,
             Long actorId,
             String actorEmail,
             String actorRol,
@@ -143,6 +216,14 @@ public class SolicitudServiceImpl implements SolicitudService {
         if (respuesta != null && !respuesta.isBlank()) {
             solicitud.setRespuestaResolucion(respuesta.trim());
         }
+        if (solucionTemporal != null && !solucionTemporal.isBlank()) {
+            solicitud.setSolucionTemporal(solucionTemporal.trim());
+        }
+        if (causaRaiz != null && !causaRaiz.isBlank()) {
+            solicitud.setCausaRaiz(causaRaiz.trim());
+        }
+
+        registrarPrimeraRespuestaSiFalta(solicitud);
 
         boolean esTerminal = nuevoEstado == EstadoSolicitud.RESUELTA
                 || nuevoEstado == EstadoSolicitud.CERRADA
@@ -152,7 +233,7 @@ public class SolicitudServiceImpl implements SolicitudService {
         if (esTerminal && solicitud.getFechaResolucion() == null) {
             LocalDateTime ahora = LocalDateTime.now();
             solicitud.setFechaResolucion(ahora);
-            solicitud.setSlaCumplido(!ahora.isAfter(solicitud.getFechaLimiteSla()));
+            solicitud.setSlaCumplido(solicitud.getFechaLimiteSla() == null || !ahora.isAfter(solicitud.getFechaLimiteSla()));
         }
 
         Solicitud actualizada = solicitudRepository.save(solicitud);
@@ -161,11 +242,11 @@ public class SolicitudServiceImpl implements SolicitudService {
                 .usuarioId(actorId)
                 .usuarioEmail(actorEmail)
                 .usuarioRol(actorRol)
-                .modulo("GESTION_SERVICIOS")
+                .modulo(actualizada.getTipo() == TipoSolicitud.INCIDENTE ? "GESTION_INCIDENTES" : "GESTION_SERVICIOS")
                 .accion("CAMBIAR_ESTADO_" + nuevoEstado.name())
                 .recurso("solicitud/" + actualizada.getCodigo())
                 .detalle("Transición " + estadoAnterior + " -> " + nuevoEstado
-                        + (respuesta != null && !respuesta.isBlank() ? " | Respuesta: " + respuesta : ""))
+                        + (respuesta != null && !respuesta.isBlank() ? " | Respuesta: " + respuesta.trim() : ""))
                 .resultado("EXITO")
                 .correlationId(correlationId)
                 .build());
@@ -195,13 +276,29 @@ public class SolicitudServiceImpl implements SolicitudService {
                         || (s.getFechaResolucion() == null && s.getFechaLimiteSla() != null && ahora.isAfter(s.getFechaLimiteSla()))
         ).count();
 
+        long slaRespuestaCumplidos = todas.stream().filter(s -> Boolean.TRUE.equals(s.getSlaRespuestaCumplido())).count();
+        long conPrimeraRespuesta = todas.stream().filter(s -> s.getFechaPrimeraRespuesta() != null).count();
+
         double porcentajeSla = resueltas > 0
                 ? Math.round((slaCumplidos * 10000.0) / resueltas) / 100.0
+                : 100.0;
+        double porcentajeSlaRespuesta = conPrimeraRespuesta > 0
+                ? Math.round((slaRespuestaCumplidos * 10000.0) / conPrimeraRespuesta) / 100.0
                 : 100.0;
 
         Map<String, Long> porTipo = new LinkedHashMap<>();
         for (TipoSolicitud tipo : TipoSolicitud.values()) {
             porTipo.put(tipo.name(), todas.stream().filter(s -> s.getTipo() == tipo).count());
+        }
+
+        Map<String, Long> porPrioridad = new LinkedHashMap<>();
+        for (PrioridadSolicitud prio : PrioridadSolicitud.values()) {
+            porPrioridad.put(prio.name(), todas.stream().filter(s -> s.getPrioridad() == prio).count());
+        }
+
+        Map<String, Long> porNivelEscalamiento = new LinkedHashMap<>();
+        for (NivelEscalamiento nivel : NivelEscalamiento.values()) {
+            porNivelEscalamiento.put(nivel.name(), todas.stream().filter(s -> s.getNivelEscalamiento() == nivel).count());
         }
 
         Map<String, Object> resumen = new LinkedHashMap<>();
@@ -212,7 +309,10 @@ public class SolicitudServiceImpl implements SolicitudService {
         resumen.put("slaCumplidos", slaCumplidos);
         resumen.put("slaVencidos", slaVencidos);
         resumen.put("porcentajeCumplimientoSla", porcentajeSla);
+        resumen.put("porcentajeCumplimientoSlaRespuesta", porcentajeSlaRespuesta);
         resumen.put("porTipo", porTipo);
+        resumen.put("porPrioridad", porPrioridad);
+        resumen.put("porNivelEscalamiento", porNivelEscalamiento);
         return resumen;
     }
 
@@ -235,11 +335,22 @@ public class SolicitudServiceImpl implements SolicitudService {
                 .build());
     }
 
+    private void registrarPrimeraRespuestaSiFalta(Solicitud solicitud) {
+        if (solicitud.getFechaPrimeraRespuesta() == null) {
+            LocalDateTime ahora = LocalDateTime.now();
+            solicitud.setFechaPrimeraRespuesta(ahora);
+            solicitud.setSlaRespuestaCumplido(
+                    solicitud.getFechaLimiteRespuestaSla() == null || !ahora.isAfter(solicitud.getFechaLimiteRespuestaSla())
+            );
+        }
+    }
+
     private String generarCodigo(TipoSolicitud tipo) {
         String prefijo = switch (tipo) {
             case SERVICIO -> "SRV";
             case INFORMACION -> "INF";
             case ACCESO -> "ACC";
+            case INCIDENTE -> "INC";
         };
         int sufijo = ThreadLocalRandom.current().nextInt(10000, 99999);
         return prefijo + "-" + Year.now().getValue() + "-" + sufijo;

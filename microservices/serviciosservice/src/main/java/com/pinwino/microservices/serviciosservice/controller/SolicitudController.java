@@ -1,9 +1,6 @@
 package com.pinwino.microservices.serviciosservice.controller;
 
-import com.pinwino.microservices.serviciosservice.model.EstadoSolicitud;
-import com.pinwino.microservices.serviciosservice.model.PrioridadSolicitud;
-import com.pinwino.microservices.serviciosservice.model.Solicitud;
-import com.pinwino.microservices.serviciosservice.model.TipoSolicitud;
+import com.pinwino.microservices.serviciosservice.model.*;
 import com.pinwino.microservices.serviciosservice.service.SolicitudService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -35,11 +32,10 @@ public class SolicitudController {
             @RequestHeader(value = "X-Correlation-Id", required = false) String correlationId,
             HttpServletRequest request) {
 
-        // Desde canal público solo se permiten solicitudes de SERVICIO o INFORMACION
         if (solicitud.getTipo() == TipoSolicitud.ACCESO) {
             solicitud.setTipo(TipoSolicitud.INFORMACION);
         }
-        if (solicitud.getPrioridad() == null) {
+        if (solicitud.getPrioridad() == null && solicitud.getImpacto() == null) {
             solicitud.setPrioridad(PrioridadSolicitud.MEDIA);
         }
         Long id = parseLong(usuarioId);
@@ -58,7 +54,7 @@ public class SolicitudController {
     }
 
     /**
-     * Crea una solicitud autenticada (SERVICIO, INFORMACION o ACCESO).
+     * Crea una solicitud o incidente autenticado (SERVICIO, INFORMACION, ACCESO, INCIDENTE).
      */
     @PostMapping
     public ResponseEntity<Solicitud> crear(
@@ -77,9 +73,6 @@ public class SolicitudController {
         return ResponseEntity.status(HttpStatus.CREATED).body(creada);
     }
 
-    /**
-     * Lista únicamente las solicitudes del usuario autenticado (anti-IDOR).
-     */
     @GetMapping("/mis-solicitudes")
     public ResponseEntity<?> misSolicitudes(
             @RequestHeader(value = "X-Usuario-Id", required = false) String usuarioId) {
@@ -92,17 +85,11 @@ public class SolicitudController {
         return ResponseEntity.ok(solicitudService.listarPorUsuario(id));
     }
 
-    /**
-     * Resumen KPI y cumplimiento SLA (solo ADMINISTRADOR y GERENCIA).
-     */
     @GetMapping("/resumen")
     public ResponseEntity<Map<String, Object>> resumenSla() {
         return ResponseEntity.ok(solicitudService.obtenerResumenSla());
     }
 
-    /**
-     * Lista todas las solicitudes con filtros opcionales (solo ADMINISTRADOR y GERENCIA).
-     */
     @GetMapping
     public ResponseEntity<List<Solicitud>> listar(
             @RequestParam(required = false) TipoSolicitud tipo,
@@ -110,9 +97,6 @@ public class SolicitudController {
         return ResponseEntity.ok(solicitudService.listar(tipo, estado));
     }
 
-    /**
-     * Obtiene detalle de una solicitud (solo su dueño o ADMINISTRADOR/GERENCIA).
-     */
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarPorId(
             @PathVariable Long id,
@@ -148,6 +132,21 @@ public class SolicitudController {
         ));
     }
 
+    @PatchMapping("/{id}/escalar")
+    public ResponseEntity<Solicitud> escalar(
+            @PathVariable Long id,
+            @Valid @RequestBody EscalamientoRequest body,
+            @RequestHeader(value = "X-Usuario-Id", required = false) String usuarioId,
+            @RequestHeader(value = "X-Usuario-Email", required = false) String usuarioEmail,
+            @RequestHeader(value = "X-Usuario-Tipo", required = false) String usuarioRol,
+            @RequestHeader(value = "X-Correlation-Id", required = false) String correlationId) {
+
+        return ResponseEntity.ok(solicitudService.escalar(
+                id, body.nivel(), body.motivo(),
+                parseLong(usuarioId), usuarioEmail, usuarioRol, correlationId
+        ));
+    }
+
     @PatchMapping("/{id}/estado")
     public ResponseEntity<Solicitud> cambiarEstado(
             @PathVariable Long id,
@@ -158,7 +157,7 @@ public class SolicitudController {
             @RequestHeader(value = "X-Correlation-Id", required = false) String correlationId) {
 
         return ResponseEntity.ok(solicitudService.cambiarEstado(
-                id, body.estado(), body.respuesta(),
+                id, body.estado(), body.respuesta(), body.solucionTemporal(), body.causaRaiz(),
                 parseLong(usuarioId), usuarioEmail, usuarioRol, correlationId
         ));
     }
@@ -194,8 +193,15 @@ public class SolicitudController {
 
     public record AsignacionRequest(Long asignadoA, String asignadoNombre) {}
 
+    public record EscalamientoRequest(
+            @NotNull(message = "El nivel de escalamiento es obligatorio") NivelEscalamiento nivel,
+            String motivo
+    ) {}
+
     public record CambioEstadoRequest(
             @NotNull(message = "El estado es obligatorio") EstadoSolicitud estado,
-            String respuesta
+            String respuesta,
+            String solucionTemporal,
+            String causaRaiz
     ) {}
 }

@@ -1,0 +1,66 @@
+groups:
+  - name: arteandino-eventos-y-capacidad
+    interval: 15s
+    rules:
+      # EXCEPCIÓN (P1): Servicio caído durante más de 1 minuto
+      - alert: ServicioCaido
+        expr: up{job="arteandino-microservices"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          clasificacion: EXCEPCION
+        annotations:
+          summary: "Microservicio {{ $labels.instance }} fuera de línea"
+          description: "El endpoint /actuator/prometheus dejó de responder por más de 1 minuto. Escalar a Incidente P1."
+
+      # EXCEPCIÓN (P1/P2): Tasa de errores HTTP 5xx > 5%
+      - alert: TasaErrores5xxAlta
+        expr: |
+          (sum by (application) (rate(http_server_requests_seconds_count{status=~"5.."}[5m]))
+           / clamp_min(sum by (application) (rate(http_server_requests_seconds_count[5m])), 0.001)) > 0.05
+        for: 2m
+        labels:
+          severity: critical
+          clasificacion: EXCEPCION
+        annotations:
+          summary: "Tasa de errores 5xx superior al 5% en {{ $labels.application }}"
+          description: "Se superó el umbral de errores de servidor. Revisar logs y evaluar rollback o escalamiento a N3."
+
+      # ADVERTENCIA (P2/P3): Latencia p95 superior a 500ms (incumplimiento de SLA de rendimiento)
+      - alert: LatenciaAltaP95
+        expr: |
+          histogram_quantile(0.95,
+            sum by (le, application) (rate(http_server_requests_seconds_bucket[5m]))
+          ) > 0.5
+        for: 3m
+        labels:
+          severity: warning
+          clasificacion: ADVERTENCIA
+        annotations:
+          summary: "Latencia HTTP p95 > 500ms en {{ $labels.application }}"
+          description: "Degradación del rendimiento detectada. Verificar HikariCP, caché Caffeine y carga de CPU."
+
+      # ADVERTENCIA (P3): Uso de JVM Heap > 80%
+      - alert: UsoHeapJvmAlto
+        expr: |
+          (sum by (application) (jvm_memory_used_bytes{area="heap"})
+           / clamp_min(sum by (application) (jvm_memory_max_bytes{area="heap"}), 1)) > 0.80
+        for: 5m
+        labels:
+          severity: warning
+          clasificacion: ADVERTENCIA
+        annotations:
+          summary: "Memoria JVM Heap sobre 80% en {{ $labels.application }}"
+          description: "Riesgo de OutOfMemoryError. Evaluar escalamiento horizontal o ajuste de límites de memoria."
+
+      # ADVERTENCIA SEGURIDAD: Pico de respuestas 401/423/429 (posible ataque de fuerza bruta)
+      - alert: PosibleAtaqueFuerzaBruta
+        expr: |
+          sum(rate(http_server_requests_seconds_count{status=~"401|423|429"}[2m])) > 0.5
+        for: 2m
+        labels:
+          severity: warning
+          clasificacion: ADVERTENCIA
+        annotations:
+          summary: "Actividad anómala de autenticación/rate-limit (401/423/429)"
+          description: "Se detectó un incremento sostenido de rechazos de seguridad en API Gateway / AuthService."

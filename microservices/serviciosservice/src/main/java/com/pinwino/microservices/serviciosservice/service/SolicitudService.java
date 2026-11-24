@@ -1,6 +1,7 @@
 package com.pinwino.microservices.serviciosservice.service;
 
 import com.pinwino.microservices.serviciosservice.model.EstadoSolicitud;
+import com.pinwino.microservices.serviciosservice.model.NivelEscalamiento;
 import com.pinwino.microservices.serviciosservice.model.Solicitud;
 import com.pinwino.microservices.serviciosservice.model.TipoSolicitud;
 
@@ -19,7 +20,19 @@ public interface SolicitudService {
 
     Solicitud asignar(Long id, Long asignadoA, String asignadoNombre, Long actorId, String actorEmail, String actorRol, String correlationId);
 
-    Solicitud cambiarEstado(Long id, EstadoSolicitud nuevoEstado, String respuesta, Long actorId, String actorEmail, String actorRol, String correlationId);
+    Solicitud escalar(Long id, NivelEscalamiento nuevoNivel, String motivo, Long actorId, String actorEmail, String actorRol, String correlationId);
+
+    Solicitud cambiarEstado(
+            Long id,
+            EstadoSolicitud nuevoEstado,
+            String respuesta,
+            String solucionTemporal,
+            String causaRaiz,
+            Long actorId,
+            String actorEmail,
+            String actorRol,
+            String correlationId
+    );
 
     Map<String, Object> obtenerResumenSla();
 

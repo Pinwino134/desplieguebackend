@@ -40,7 +40,7 @@ spring:
             - id: servicios-service
               uri: lb://serviciosservice
               predicates:
-                - Path=/api/v1/solicitudes/**,/api/v1/auditoria/**
+                - Path=/api/v1/solicitudes/**,/api/v1/auditoria/**,/api/v1/eventos/**,/api/v1/continuidad/**
 
 # Mismo secreto que authservice: inyectar mediante variable de entorno JWT_SECRET en producción.
 jwt:
@@ -113,6 +113,12 @@ app:
       - method: POST
         path: /api/v1/auditoria/**
         roles: [ADMINISTRADOR, GERENCIA, ARTESANO, CLIENTE]
+      - method: "*"
+        path: /api/v1/eventos/**
+        roles: [ADMINISTRADOR, GERENCIA]
+      - method: GET
+        path: /api/v1/continuidad/**
+        roles: [ADMINISTRADOR, GERENCIA]
 
       # Mi perfil: cualquier usuario autenticado (el servicio usa X-Usuario-Id).
       - method: "*"

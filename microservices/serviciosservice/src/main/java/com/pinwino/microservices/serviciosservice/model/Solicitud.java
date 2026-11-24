@@ -16,7 +16,8 @@ import java.time.LocalDateTime;
     indexes = {
         @Index(name = "idx_solicitud_usuario", columnList = "usuario_id"),
         @Index(name = "idx_solicitud_tipo", columnList = "tipo"),
-        @Index(name = "idx_solicitud_estado", columnList = "estado")
+        @Index(name = "idx_solicitud_estado", columnList = "estado"),
+        @Index(name = "idx_solicitud_prioridad", columnList = "prioridad")
     }
 )
 @Getter
@@ -39,12 +40,27 @@ public class Solicitud {
     private TipoSolicitud tipo;
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 10)
+    private NivelImpacto impacto;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 10)
+    private NivelUrgencia urgencia;
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 15)
     private PrioridadSolicitud prioridad;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private EstadoSolicitud estado;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "nivel_escalamiento", nullable = false, length = 25)
+    private NivelEscalamiento nivelEscalamiento;
+
+    @Column(name = "servicio_afectado", length = 60)
+    private String servicioAfectado;
 
     @NotBlank(message = "El asunto es obligatorio")
     @Size(max = 150, message = "El asunto no puede superar los 150 caracteres")
@@ -78,15 +94,27 @@ public class Solicitud {
     @Column(name = "rol_solicitado", length = 30)
     private String rolSolicitado;
 
-    /** Referencia opcional cuando la solicitud está asociada a un pedido. */
+    /** Referencia opcional cuando la solicitud/incidente está asociado a un pedido. */
     @Column(name = "pedido_id")
     private Long pedidoId;
+
+    /** ID del evento de monitoreo que originó este incidente (si aplica). */
+    @Column(name = "evento_origen_id")
+    private Long eventoOrigenId;
 
     @Column(name = "asignado_a")
     private Long asignadoA;
 
     @Column(name = "asignado_nombre", length = 120)
     private String asignadoNombre;
+
+    @Size(max = 1500)
+    @Column(name = "solucion_temporal", length = 1500)
+    private String solucionTemporal;
+
+    @Size(max = 1500)
+    @Column(name = "causa_raiz", length = 1500)
+    private String causaRaiz;
 
     @Size(max = 2000)
     @Column(name = "respuesta_resolucion", length = 2000)
@@ -95,6 +123,15 @@ public class Solicitud {
     @CreationTimestamp
     @Column(name = "fecha_creacion", nullable = false, updatable = false)
     private LocalDateTime fechaCreacion;
+
+    @Column(name = "fecha_limite_respuesta_sla")
+    private LocalDateTime fechaLimiteRespuestaSla;
+
+    @Column(name = "fecha_primera_respuesta")
+    private LocalDateTime fechaPrimeraRespuesta;
+
+    @Column(name = "sla_respuesta_cumplido")
+    private Boolean slaRespuestaCumplido;
 
     @Column(name = "fecha_limite_sla", nullable = false)
     private LocalDateTime fechaLimiteSla;
