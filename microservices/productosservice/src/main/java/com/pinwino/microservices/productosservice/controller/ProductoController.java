@@ -142,6 +142,14 @@ public class ProductoController {
         );
     }
 
+    // Ajuste de stock interno (invocado por ventasservice al confirmar pago o cancelar pedido).
+    @PostMapping("/{id}/stock")
+    public ResponseEntity<Producto> ajustarStock(
+            @PathVariable Long id,
+            @RequestParam Integer delta) {
+        return ResponseEntity.ok(productoService.ajustarStock(id, delta));
+    }
+
     // =========================================================
     // Materiales del producto
     // =========================================================

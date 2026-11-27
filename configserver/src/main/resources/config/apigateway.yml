@@ -68,6 +68,10 @@ app:
         path: /api/v1/catalogo/**
       - method: GET
         path: /api/v1/resenas/producto/**
+      - method: GET
+        path: /api/v1/artesanos/publico
+      - method: GET
+        path: /api/v1/artesanos/*/publico
       - method: POST
         path: /api/v1/solicitudes/publica
 
@@ -174,14 +178,44 @@ app:
         path: /api/v1/categorias/**
         roles: [ADMINISTRADOR]
 
-      # Perfiles de artesano
+      # Perfiles de artesano y revisión de logros destacados
       - method: GET
         path: /api/v1/artesanos
         roles: [ADMINISTRADOR, GERENCIA]
+      - method: GET
+        path: /api/v1/artesanos/logros
+        roles: [ADMINISTRADOR, GERENCIA]
+      - method: PATCH
+        path: /api/v1/artesanos/logros/*/revisar
+        roles: [ADMINISTRADOR]
+      - method: POST
+        path: /api/v1/artesanos/*/logros
+        roles: [ARTESANO, ADMINISTRADOR]
+      - method: GET
+        path: /api/v1/artesanos/*/logros
+        roles: [ARTESANO, ADMINISTRADOR]
 
-      # Pedidos y pagos (reglas específicas para proteger estados y reembolsos)
+      # Pedidos y pagos (catálogo, personalizados, cotización, producción, envío y cancelación)
+      - method: POST
+        path: /api/v1/pedidos/personalizado
+        roles: [CLIENTE, ADMINISTRADOR]
+      - method: PATCH
+        path: /api/v1/pedidos/*/cotizar
+        roles: [ARTESANO, ADMINISTRADOR]
+      - method: PATCH
+        path: /api/v1/pedidos/*/responder-cotizacion
+        roles: [CLIENTE, ADMINISTRADOR]
       - method: PATCH
         path: /api/v1/pedidos/*/confirmar-pago
+        roles: [CLIENTE, ADMINISTRADOR]
+      - method: PATCH
+        path: /api/v1/pedidos/*/produccion
+        roles: [ARTESANO, ADMINISTRADOR]
+      - method: PATCH
+        path: /api/v1/pedidos/*/enviar
+        roles: [ARTESANO, ADMINISTRADOR]
+      - method: POST
+        path: /api/v1/pedidos/*/cancelar
         roles: [CLIENTE, ADMINISTRADOR]
       - method: PATCH
         path: /api/v1/pedidos/*/estado

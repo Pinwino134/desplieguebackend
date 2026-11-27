@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -23,37 +25,22 @@ public class PedidoController {
             @RequestParam(required = false) Long artesanoId,
             @RequestParam(required = false) EstadoPedido estado) {
 
-        // Si se envía el ID del artesano,
-        // mostramos solamente sus pedidos.
         if (artesanoId != null) {
-            return ResponseEntity.ok(
-                    pedidoService.listarPorArtesano(artesanoId)
-            );
+            return ResponseEntity.ok(pedidoService.listarPorArtesano(artesanoId));
         }
-
-        // Permite consultar los pedidos de un cliente.
         if (clienteId != null) {
-            return ResponseEntity.ok(
-                    pedidoService.listarPorCliente(clienteId)
-            );
+            return ResponseEntity.ok(pedidoService.listarPorCliente(clienteId));
         }
-
-        // Permite filtrar los pedidos por su estado.
         if (estado != null) {
-            return ResponseEntity.ok(
-                    pedidoService.listarPorEstado(estado)
-            );
+            return ResponseEntity.ok(pedidoService.listarPorEstado(estado));
         }
-
-        // Si no se envía ningún filtro,
-        // mostramos todos los pedidos.
-        return ResponseEntity.ok(
-                pedidoService.listarTodos()
-        );
+        return ResponseEntity.ok(pedidoService.listarTodos());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Pedido> buscarPorId(@PathVariable Long id) { return ResponseEntity.ok(pedidoService.buscarPorId(id)); }
+    public ResponseEntity<Pedido> buscarPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(pedidoService.buscarPorId(id));
+    }
 
     @PostMapping
     public ResponseEntity<Pedido> crear(
@@ -64,8 +51,41 @@ public class PedidoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
+    /** Cliente solicita un pedido personalizado con cotización al artesano. */
+    @PostMapping("/personalizado")
+    public ResponseEntity<Pedido> crearPersonalizado(@RequestBody PedidoPersonalizadoRequest req) {
+        Pedido creado = pedidoService.crearPersonalizado(
+                req.clienteId(),
+                req.artesanoId(),
+                req.descripcion(),
+                req.presupuestoReferencial(),
+                req.direccionEnvioId()
+        );
+        return ResponseEntity.status(HttpStatus.CREATED).body(creado);
+    }
+
+    /** Artesano evalúa la solicitud personalizada: cotiza (aceptar=true) o rechaza (aceptar=false). */
+    @PatchMapping("/{id}/cotizar")
+    public ResponseEntity<Pedido> cotizarPersonalizado(
+            @PathVariable Long id,
+            @RequestBody CotizacionRequest req) {
+        return ResponseEntity.ok(pedidoService.cotizarPersonalizado(
+                id, req.aceptar(), req.precioCotizado(), req.diasEstimados(), req.notaArtesano()
+        ));
+    }
+
+    /** Cliente acepta (pasa a PENDIENTE_PAGO) o rechaza (CANCELADO) la cotización del artesano. */
+    @PatchMapping("/{id}/responder-cotizacion")
+    public ResponseEntity<Pedido> responderCotizacion(
+            @PathVariable Long id,
+            @RequestBody RespuestaCotizacionRequest req) {
+        return ResponseEntity.ok(pedidoService.responderCotizacion(id, req.aceptar(), req.direccionEnvioId()));
+    }
+
     @PostMapping("/{pedidoId}/detalles")
-    public ResponseEntity<DetallePedido> agregarDetalle(@PathVariable Long pedidoId, @Valid @RequestBody DetallePedido detalle) {
+    public ResponseEntity<DetallePedido> agregarDetalle(
+            @PathVariable Long pedidoId,
+            @Valid @RequestBody DetallePedido detalle) {
         return ResponseEntity.status(HttpStatus.CREATED).body(pedidoService.agregarDetalle(pedidoId, detalle));
     }
 
@@ -75,15 +95,44 @@ public class PedidoController {
     }
 
     @PostMapping("/{id}/pago")
-    public ResponseEntity<Pedido> iniciarPago(@PathVariable Long id, @RequestParam(required = false) Long metodoPagoId) {
+    public ResponseEntity<Pedido> iniciarPago(
+            @PathVariable Long id,
+            @RequestParam(required = false) Long metodoPagoId) {
         return ResponseEntity.ok(pedidoService.iniciarPago(id, metodoPagoId));
     }
 
-    // Uso interno: lo invoca pagos-service via Feign cuando el pago se aprueba/rechaza.
-    // En un entorno real esto deberia protegerse (red interna / token de servicio a servicio).
     @PatchMapping("/{id}/confirmar-pago")
     public ResponseEntity<Pedido> confirmarPago(@PathVariable Long id, @RequestParam boolean aprobado) {
         return ResponseEntity.ok(pedidoService.confirmarPago(id, aprobado));
+    }
+
+    /** Artesano registra avance de producción (0-100%) SOLO si el pedido está pagado. */
+    @PatchMapping("/{id}/produccion")
+    public ResponseEntity<Pedido> actualizarProduccion(
+            @PathVariable Long id,
+            @RequestBody ProduccionRequest req) {
+        return ResponseEntity.ok(pedidoService.actualizarProduccion(id, req.avance(), req.nota()));
+    }
+
+    /** Artesano o Administrador registra el envío (pasa a ENVIADO y bloquea cancelaciones). */
+    @PatchMapping("/{id}/enviar")
+    public ResponseEntity<Pedido> registrarEnvio(
+            @PathVariable Long id,
+            @RequestBody(required = false) EnvioDatosRequest req) {
+        String empresa = req != null ? req.empresaEnvio() : null;
+        String tracking = req != null ? req.codigoSeguimiento() : null;
+        return ResponseEntity.ok(pedidoService.registrarEnvio(id, empresa, tracking));
+    }
+
+    /** Cancela un pedido (si no fue ENVIADO/ENTREGADO) y genera reembolso bancario simulado si ya estaba pagado. */
+    @PostMapping("/{id}/cancelar")
+    public ResponseEntity<Pedido> cancelarConReembolso(
+            @PathVariable Long id,
+            @RequestBody(required = false) CancelacionRequest req) {
+        String motivo = req != null ? req.motivo() : null;
+        String banco = req != null ? req.banco() : null;
+        String cuenta = req != null ? req.cuenta() : null;
+        return ResponseEntity.ok(pedidoService.cancelarConReembolso(id, motivo, banco, cuenta));
     }
 
     @DeleteMapping("/{id}")
@@ -91,4 +140,27 @@ public class PedidoController {
         pedidoService.eliminar(id);
         return ResponseEntity.noContent().build();
     }
+
+    public record PedidoPersonalizadoRequest(
+            Long clienteId,
+            Long artesanoId,
+            String descripcion,
+            BigDecimal presupuestoReferencial,
+            Long direccionEnvioId
+    ) {}
+
+    public record CotizacionRequest(
+            boolean aceptar,
+            BigDecimal precioCotizado,
+            Integer diasEstimados,
+            String notaArtesano
+    ) {}
+
+    public record RespuestaCotizacionRequest(boolean aceptar, Long direccionEnvioId) {}
+
+    public record ProduccionRequest(Integer avance, String nota) {}
+
+    public record EnvioDatosRequest(String empresaEnvio, String codigoSeguimiento) {}
+
+    public record CancelacionRequest(String motivo, String banco, String cuenta) {}
 }

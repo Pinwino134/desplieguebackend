@@ -161,6 +161,30 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     @Transactional
+    public Producto ajustarStock(Long id, Integer delta) {
+        Producto producto = buscarPorId(id);
+        int actual = producto.getStock() != null ? producto.getStock() : 0;
+        int cambio = delta != null ? delta : 0;
+        int nuevoStock = actual + cambio;
+
+        if (nuevoStock < 0) {
+            throw new BusinessException(
+                    "Stock insuficiente para " + producto.getNombre()
+                            + " (disponible: " + actual + ", requerido: " + Math.abs(cambio) + ")"
+            );
+        }
+
+        producto.setStock(nuevoStock);
+        if (nuevoStock == 0 && producto.getEstado() != EstadoProducto.INACTIVO) {
+            producto.setEstado(EstadoProducto.AGOTADO);
+        } else if (nuevoStock > 0 && producto.getEstado() == EstadoProducto.AGOTADO) {
+            producto.setEstado(EstadoProducto.ACTIVO);
+        }
+        return productoRepository.save(producto);
+    }
+
+    @Override
+    @Transactional
     public ProductoMaterial agregarMaterial(
             Long productoId,
             Long materialId,

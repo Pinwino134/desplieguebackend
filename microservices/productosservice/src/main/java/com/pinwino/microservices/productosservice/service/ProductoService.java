@@ -34,6 +34,8 @@ public interface ProductoService {
 
     Producto desactivar(Long id);
 
+    Producto ajustarStock(Long id, Integer delta);
+
     // Gestión de materiales del producto
     ProductoMaterial agregarMaterial(
             Long productoId,
