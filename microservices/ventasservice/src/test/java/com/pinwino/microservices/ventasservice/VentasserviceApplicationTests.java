@@ -1,7 +1,6 @@
 package com.pinwino.microservices.ventasservice;
 
 import com.pinwino.microservices.ventasservice.client.EnvioClient;
-import com.pinwino.microservices.ventasservice.client.InventarioClient;
 import com.pinwino.microservices.ventasservice.client.PagoClient;
 import com.pinwino.microservices.ventasservice.client.ProductoClient;
 import com.pinwino.microservices.ventasservice.client.dto.ProductoDTO;
@@ -34,7 +33,6 @@ class VentasserviceApplicationTests {
     @Mock private DetallePedidoRepository detallePedidoRepository;
     @Mock private DireccionRepository direccionRepository;
     @Mock private ProductoClient productoClient;
-    @Mock private InventarioClient inventarioClient;
     @Mock private PagoClient pagoClient;
     @Mock private EnvioClient envioClient;
 
@@ -44,7 +42,7 @@ class VentasserviceApplicationTests {
     void setUp() {
         pedidoService = new PedidoServiceImpl(
                 pedidoRepository, detallePedidoRepository, direccionRepository,
-                productoClient, inventarioClient, pagoClient, envioClient
+                productoClient, pagoClient, envioClient
         );
     }
 

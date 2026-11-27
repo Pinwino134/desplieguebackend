@@ -59,6 +59,16 @@ public class PagoServiceImpl implements PagoService {
     @Override @Transactional
     public Pago actualizarEstado(Long id, EstadoPago estado, String referenciaTransaccion) {
         Pago pago = buscarPorId(id);
+
+        // PENDIENTE -> APROBADO | RECHAZADO ; APROBADO -> REVERTIDO. Nada más.
+        boolean valida = (pago.getEstado() == EstadoPago.PENDIENTE
+                    && (estado == EstadoPago.APROBADO || estado == EstadoPago.RECHAZADO))
+                || (pago.getEstado() == EstadoPago.APROBADO && estado == EstadoPago.REVERTIDO);
+        if (!valida) {
+            throw new com.pinwino.microservice.pagosservice.exception.BusinessException(
+                    "El pago está " + pago.getEstado() + " y no puede pasar a " + estado);
+        }
+
         pago.setEstado(estado);
         if (referenciaTransaccion != null) {
             pago.setReferenciaTransaccion(referenciaTransaccion);

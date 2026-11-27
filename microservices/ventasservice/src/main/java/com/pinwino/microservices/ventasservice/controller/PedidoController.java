@@ -89,7 +89,8 @@ public class PedidoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(pedidoService.agregarDetalle(pedidoId, detalle));
     }
 
-    @PatchMapping("/{id}/estado")
+    // PATCH y POST: el frontend y los clientes Feign no usan el mismo método, y así ninguno recibe 405
+    @RequestMapping(value = "/{id}/estado", method = {RequestMethod.PATCH, RequestMethod.POST})
     public ResponseEntity<Pedido> cambiarEstado(@PathVariable Long id, @RequestParam EstadoPedido estado) {
         return ResponseEntity.ok(pedidoService.cambiarEstado(id, estado));
     }
@@ -101,7 +102,8 @@ public class PedidoController {
         return ResponseEntity.ok(pedidoService.iniciarPago(id, metodoPagoId));
     }
 
-    @PatchMapping("/{id}/confirmar-pago")
+    // PATCH (frontend) y POST (Feign desde pagos-service cuando el pago se aprueba/rechaza)
+    @RequestMapping(value = "/{id}/confirmar-pago", method = {RequestMethod.PATCH, RequestMethod.POST})
     public ResponseEntity<Pedido> confirmarPago(@PathVariable Long id, @RequestParam boolean aprobado) {
         return ResponseEntity.ok(pedidoService.confirmarPago(id, aprobado));
     }

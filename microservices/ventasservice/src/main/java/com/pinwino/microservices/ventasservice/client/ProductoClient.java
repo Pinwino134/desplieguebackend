@@ -23,4 +23,8 @@ public interface ProductoClient {
 
     @PostMapping("/api/v1/productos/{id}/stock")
     ProductoDTO ajustarStock(@PathVariable("id") Long id, @RequestParam("delta") Integer delta);
+
+    @PostMapping("/api/v1/productos/{id}/stock/descontar")
+    ProductoDTO descontarStock(@PathVariable("id") Long id,
+                               @RequestParam("cantidad") Integer cantidad);
 }

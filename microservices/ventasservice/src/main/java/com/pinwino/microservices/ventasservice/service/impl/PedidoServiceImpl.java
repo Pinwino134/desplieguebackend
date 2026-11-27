@@ -1,11 +1,9 @@
 package com.pinwino.microservices.ventasservice.service.impl;
 
 import com.pinwino.microservices.ventasservice.client.EnvioClient;
-import com.pinwino.microservices.ventasservice.client.InventarioClient;
 import com.pinwino.microservices.ventasservice.client.PagoClient;
 import com.pinwino.microservices.ventasservice.client.ProductoClient;
 import com.pinwino.microservices.ventasservice.client.dto.EnvioRequestDTO;
-import com.pinwino.microservices.ventasservice.client.dto.InventarioDTO;
 import com.pinwino.microservices.ventasservice.client.dto.ProductoDTO;
 import com.pinwino.microservices.ventasservice.exception.BusinessException;
 import com.pinwino.microservices.ventasservice.exception.ResourceNotFoundException;
@@ -43,7 +41,6 @@ public class PedidoServiceImpl implements PedidoService {
     private final DireccionRepository direccionRepository;
 
     private final ProductoClient productoClient;
-    private final InventarioClient inventarioClient;
     private final PagoClient pagoClient;
     private final EnvioClient envioClient;
 
@@ -259,10 +256,22 @@ public class PedidoServiceImpl implements PedidoService {
         Pedido pedido = buscarPorId(pedidoId);
 
         if (!aprobado) {
+            // Rechazo o cancelación de la compra: el pedido queda CANCELADO en la base
+            if (pedido.getEstado() == EstadoPedido.CANCELADO) {
+                return pedido; // ya estaba cancelado
+            }
+            if (pedido.getEstado() != EstadoPedido.PENDIENTE_PAGO) {
+                throw new BusinessException("No se puede cancelar un pedido en estado " + pedido.getEstado());
+            }
             pedido.setEstado(EstadoPedido.CANCELADO);
             pedido.setMotivoCancelacion("Pago rechazado por la pasarela.");
             pedido.setFechaCancelacion(LocalDateTime.now());
             return pedidoRepository.save(pedido);
+        }
+
+        // Un pedido solo se puede pagar una vez (evita descontar el stock dos veces)
+        if (pedido.getEstado() != EstadoPedido.PENDIENTE_PAGO) {
+            throw new BusinessException("El pedido ya fue procesado (estado: " + pedido.getEstado() + ")");
         }
 
         boolean yaPagadoAntes = Boolean.TRUE.equals(pedido.getPagado());

@@ -18,10 +18,14 @@ public class CorsConfig {
 
         config.setAllowedOriginPatterns(
             List.of(
-                // Desarrollo local (Vite dev 5173, preview 4173, etc.)
+                // Desarrollo local
                 "http://localhost:*",
                 "http://127.0.0.1:*",
-                // Frontend en Vercel (producción y previews del proyecto)
+
+                // Frontend de producción
+                "https://despliegue-front-alpha.vercel.app",
+
+                // Previews del proyecto anterior, si siguen utilizándose
                 "https://front-web-artesania-*.vercel.app"
             )
         );
@@ -37,9 +41,7 @@ public class CorsConfig {
             )
         );
 
-        config.setAllowedHeaders(
-            List.of("*")
-        );
+        config.setAllowedHeaders(List.of("*"));
 
         config.setExposedHeaders(
             List.of(
@@ -53,7 +55,7 @@ public class CorsConfig {
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source =
-                new UrlBasedCorsConfigurationSource();
+            new UrlBasedCorsConfigurationSource();
 
         source.registerCorsConfiguration("/**", config);
 

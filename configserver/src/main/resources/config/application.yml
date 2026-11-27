@@ -23,6 +23,7 @@ management:
     tags:
       application: ${spring.application.name}
     distribution:
+      # histogramas de latencia -> permiten calcular percentiles (p95, p99)
       percentiles-histogram:
         http.server.requests: true
 

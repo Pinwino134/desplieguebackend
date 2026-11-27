@@ -74,6 +74,14 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
                 : UUID.randomUUID().toString();
         exchange.getResponse().getHeaders().set(HEADER_CORRELATION_ID, correlationId);
 
+        // Permitir preflight CORS sin exigir un token JWT.
+        // El CorsWebFilter se encarga de validar el origen, método y headers.
+        if ("OPTIONS".equalsIgnoreCase(method)
+                && request.getHeaders().getOrigin() != null
+                && request.getHeaders().getFirst("Access-Control-Request-Method") != null) {
+            return chain.filter(exchange);
+        }
+
         // Sea pública o no, nunca confiamos en estos headers si vienen del cliente.
         ServerWebExchange limpio = exchange.mutate()
                 .request(r -> r.headers(h -> {

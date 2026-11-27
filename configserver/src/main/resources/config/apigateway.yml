@@ -35,7 +35,7 @@ spring:
             - id: gerencia-service
               uri: lb://gerenciaservice
               predicates:
-                - Path=/api/v1/kpis/**,/api/v1/presupuestos/**,/api/v1/gerentes/**,/api/v1/reportes/**,/api/v1/decisiones/**
+                - Path=/api/v1/kpis/**,/api/v1/presupuestos/**,/api/v1/gerentes/**,/api/v1/reportes/**,/api/v1/decisiones/**,/api/v1/cambios/**
 
             - id: servicios-service
               uri: lb://serviciosservice
@@ -81,6 +81,11 @@ app:
       # Módulo de gerencia: solo gerencia y administradores
       - method: "*"
         path: /api/v1/kpis/**
+        roles: [GERENCIA, ADMINISTRADOR]
+      # Gestión de cambios: administración propone/implementa y gerencia aprueba
+      # (qué puede hacer cada rol lo valida el servicio)
+      - method: "*"
+        path: /api/v1/cambios/**
         roles: [GERENCIA, ADMINISTRADOR]
       - method: "*"
         path: /api/v1/presupuestos/**
@@ -140,7 +145,13 @@ app:
         path: /api/v1/usuarios/**
         roles: [ADMINISTRADOR]
 
-      # Catálogo y producción
+      # Catálogo y producción (endpoints internos de stock bloqueados externamente: solo Feign)
+      - method: POST
+        path: /api/v1/productos/*/stock/descontar
+        roles: []
+      - method: POST
+        path: /api/v1/productos/*/stock
+        roles: []
       - method: POST
         path: /api/v1/productos/**
         roles: [ARTESANO, ADMINISTRADOR]

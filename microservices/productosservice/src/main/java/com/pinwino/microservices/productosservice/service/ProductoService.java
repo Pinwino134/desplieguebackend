@@ -36,6 +36,9 @@ public interface ProductoService {
 
     Producto ajustarStock(Long id, Integer delta);
 
+    // Descuenta stock tras una venta pagada (nunca baja de 0).
+    Producto descontarStock(Long id, Integer cantidad);
+
     // Gestión de materiales del producto
     ProductoMaterial agregarMaterial(
             Long productoId,
