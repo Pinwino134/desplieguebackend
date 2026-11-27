@@ -43,6 +43,15 @@ public class CorsConfig {
 
         config.setAllowedHeaders(List.of("*"));
 
+        config.setExposedHeaders(
+            List.of(
+                "X-Correlation-Id",
+                "X-RateLimit-Limit",
+                "X-RateLimit-Remaining",
+                "Retry-After"
+            )
+        );
+
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source =

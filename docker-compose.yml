@@ -1,31 +1,46 @@
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+x-common-env: &common-env
+  DB_HOST: postgres
+  DB_USER: ${DB_USER:-postgres}
+  DB_PASSWORD: ${DB_PASSWORD:-1234}
+  JWT_SECRET: ${JWT_SECRET:-c2FtcGxlLXNlY3JldC1jYW1iaWFyLWVuLXByb2R1Y2Npb24tZWNjb21lcmNlLXBpbndpbm8tMjAyNg==}
+  JAVA_OPTS: "-XX:MaxRAMPercentage=75.0 -XX:+UseSerialGC"
+
 services:
 
   # --------------------------------------------------------------
-  # Una sola instancia de Postgres sirviendo las 6 bases de datos
-  # (coincide con cómo ya estaba configurado: distintas "url" pero
-  # mismo host/puerto). Ver postgres/init-databases.sh.
+  # PostgreSQL 16 sirviendo las 7 bases de datos aisladas
   # --------------------------------------------------------------
   postgres:
     image: postgres:16-alpine
     container_name: postgres
     restart: unless-stopped
+    logging: *default-logging
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1234
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-1234}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./postgres/init-databases.sh:/docker-entrypoint-initdb.d/init-databases.sh
+      - ./postgres/init-databases.sh:/docker-entrypoint-initdb.d/init-databases.sh:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
       interval: 5s
       timeout: 5s
       retries: 10
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     networks:
       - eccomerce-net
 
   # --------------------------------------------------------------
-  # Config Server: sirve los YAML de /config (perfil "native"),
-  # ya quedan empaquetados dentro del jar al compilar.
+  # Config Server (perfil native)
   # --------------------------------------------------------------
   configserver:
     build:
@@ -33,11 +48,17 @@ services:
       dockerfile: configserver/Dockerfile
     container_name: configserver
     restart: unless-stopped
+    logging: *default-logging
+    environment: *common-env
+    deploy:
+      resources:
+        limits:
+          memory: 384M
     networks:
       - eccomerce-net
 
   # --------------------------------------------------------------
-  # Eureka Server
+  # Eureka Server (solo accesible en red interna o localhost)
   # --------------------------------------------------------------
   discoveryserver:
     build:
@@ -45,10 +66,17 @@ services:
       dockerfile: discoveryserver/Dockerfile
     container_name: discoveryserver
     restart: unless-stopped
+    logging: *default-logging
+    environment: *common-env
     depends_on:
-      - configserver
+      configserver:
+        condition: service_healthy
     ports:
       - "127.0.0.1:8761:8761"
+    deploy:
+      resources:
+        limits:
+          memory: 384M
     networks:
       - eccomerce-net
 
@@ -61,17 +89,28 @@ services:
       dockerfile: apigateway/Dockerfile
     container_name: apigateway
     restart: unless-stopped
+    logging: *default-logging
+    environment:
+      <<: *common-env
+      RATE_LIMIT_ENABLED: ${RATE_LIMIT_ENABLED:-true}
+      RATE_LIMIT_AUTH_RPM: ${RATE_LIMIT_AUTH_RPM:-25}
+      RATE_LIMIT_API_RPM: ${RATE_LIMIT_API_RPM:-200}
     ports:
       - "8080:8080"
     depends_on:
-      - configserver
-      - discoveryserver
+      configserver:
+        condition: service_healthy
+      discoveryserver:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     networks:
       - eccomerce-net
 
   # --------------------------------------------------------------
-  # Microservicios de negocio
-  # (contexto = raíz del repo, porque heredan de pom.xml padre)
+  # Microservicios de negocio (7 servicios)
   # --------------------------------------------------------------
   authservice:
     build:
@@ -79,18 +118,23 @@ services:
       dockerfile: microservices/authservice/Dockerfile
     container_name: authservice
     restart: unless-stopped
+    logging: *default-logging
     environment:
-      # Primer administrador (solo se crea si aún no existe ninguno).
-      # Defínelos en un archivo .env junto a este docker-compose.yml.
+      <<: *common-env
+      # Primer administrador opcional (solo se crea si aún no existe ninguno)
       ADMIN_EMAIL: ${ADMIN_EMAIL:-}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
     depends_on:
       configserver:
-        condition: service_started
+        condition: service_healthy
       discoveryserver:
-        condition: service_started
+        condition: service_healthy
       postgres:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 384M
     networks:
       - eccomerce-net
 
@@ -100,13 +144,19 @@ services:
       dockerfile: microservices/productosservice/Dockerfile
     container_name: productosservice
     restart: unless-stopped
+    logging: *default-logging
+    environment: *common-env
     depends_on:
       configserver:
-        condition: service_started
+        condition: service_healthy
       discoveryserver:
-        condition: service_started
+        condition: service_healthy
       postgres:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 384M
     networks:
       - eccomerce-net
 
@@ -116,13 +166,19 @@ services:
       dockerfile: microservices/ventasservice/Dockerfile
     container_name: ventasservice
     restart: unless-stopped
+    logging: *default-logging
+    environment: *common-env
     depends_on:
       configserver:
-        condition: service_started
+        condition: service_healthy
       discoveryserver:
-        condition: service_started
+        condition: service_healthy
       postgres:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 384M
     networks:
       - eccomerce-net
 
@@ -132,13 +188,19 @@ services:
       dockerfile: microservices/pagosservice/Dockerfile
     container_name: pagosservice
     restart: unless-stopped
+    logging: *default-logging
+    environment: *common-env
     depends_on:
       configserver:
-        condition: service_started
+        condition: service_healthy
       discoveryserver:
-        condition: service_started
+        condition: service_healthy
       postgres:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 384M
     networks:
       - eccomerce-net
 
@@ -148,13 +210,19 @@ services:
       dockerfile: microservices/logisticaservice/Dockerfile
     container_name: logisticaservice
     restart: unless-stopped
+    logging: *default-logging
+    environment: *common-env
     depends_on:
       configserver:
-        condition: service_started
+        condition: service_healthy
       discoveryserver:
-        condition: service_started
+        condition: service_healthy
       postgres:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 384M
     networks:
       - eccomerce-net
 
@@ -164,30 +232,62 @@ services:
       dockerfile: microservices/gerenciaservice/Dockerfile
     container_name: gerenciaservice
     restart: unless-stopped
+    logging: *default-logging
+    environment: *common-env
     depends_on:
       configserver:
-        condition: service_started
+        condition: service_healthy
       discoveryserver:
-        condition: service_started
+        condition: service_healthy
       postgres:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 384M
+    networks:
+      - eccomerce-net
+
+  serviciosservice:
+    build:
+      context: .
+      dockerfile: microservices/serviciosservice/Dockerfile
+    container_name: serviciosservice
+    restart: unless-stopped
+    logging: *default-logging
+    environment: *common-env
+    depends_on:
+      configserver:
+        condition: service_healthy
+      discoveryserver:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 384M
     networks:
       - eccomerce-net
 
   # --------------------------------------------------------------
-  # MONITOREO: Prometheus (recolecta) + Grafana (visualiza)
-  #   Grafana:    http://localhost:3000   (usuario admin / GRAFANA_ADMIN_PASSWORD)
-  #   Prometheus: http://localhost:9090   (solo accesible desde la propia máquina)
+  # Observabilidad y Gestión de Capacidad (perfil opcional)
+  # Levantar con: docker compose --profile monitoring up -d
+  #   Grafana:    http://localhost:3000
+  #   Prometheus: http://localhost:9090
   # --------------------------------------------------------------
   prometheus:
-    image: prom/prometheus:v2.55.1
+    image: prom/prometheus:v3.2.1
     container_name: prometheus
+    profiles: ["monitoring"]
     restart: unless-stopped
+    logging: *default-logging
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.retention.time=7d
     volumes:
-      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/alerts.yml:/etc/prometheus/alerts.yml:ro
       - prometheus_data:/prometheus
     ports:
       - "127.0.0.1:9090:9090"
@@ -195,21 +295,23 @@ services:
       - eccomerce-net
 
   grafana:
-    image: grafana/grafana:11.3.1
+    image: grafana/grafana:11.5.2
     container_name: grafana
+    profiles: ["monitoring"]
     restart: unless-stopped
-    depends_on:
-      - prometheus
+    logging: *default-logging
     environment:
-      GF_SECURITY_ADMIN_USER: admin
-      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-${GRAFANA_ADMIN_PASSWORD:-admin123}}
       GF_USERS_ALLOW_SIGN_UP: "false"
     volumes:
-      - grafana_data:/var/lib/grafana
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
       - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana_data:/var/lib/grafana
     ports:
       - "3000:3000"
+    depends_on:
+      - prometheus
     networks:
       - eccomerce-net
 

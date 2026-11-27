@@ -7,6 +7,8 @@ import com.pinwino.microservices.productosservice.model.EstadoCategoria;
 import com.pinwino.microservices.productosservice.repository.CategoriaRepository;
 import com.pinwino.microservices.productosservice.service.CategoriaService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable("categorias")
     public List<Categoria> listarTodas() {
         return categoriaRepository.findAll();
     }
@@ -34,6 +37,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "categorias", allEntries = true)
     public Categoria crear(Categoria categoria) {
 
         if (categoriaRepository.existsByNombre(categoria.getNombre())) {
@@ -50,6 +54,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "categorias", allEntries = true)
     public Categoria actualizar(Long id, Categoria datos) {
 
         Categoria existente = buscarPorId(id);
@@ -62,6 +67,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "categorias", allEntries = true)
     public Categoria activar(Long id) {
 
         Categoria categoria = buscarPorId(id);
@@ -73,6 +79,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "categorias", allEntries = true)
     public Categoria desactivar(Long id) {
 
         Categoria categoria = buscarPorId(id);

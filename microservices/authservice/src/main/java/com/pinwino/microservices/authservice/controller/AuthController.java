@@ -4,6 +4,9 @@ import com.pinwino.microservices.authservice.dto.LoginResponse;
 import com.pinwino.microservices.authservice.model.Usuario;
 import com.pinwino.microservices.authservice.security.JwtService;
 import com.pinwino.microservices.authservice.service.UsuarioService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,14 +21,14 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(
-            @RequestBody LoginRequest request
+            @Valid @RequestBody LoginRequest request
     ) {
 
         // autenticar() ya valida credenciales, intentos fallidos y
         // bloqueo de cuenta; si llega a devolver el usuario es porque
         // el login es válido.
         Usuario usuario = usuarioService.autenticar(
-                request.email(),
+                request.email().trim(),
                 request.password()
         );
 
@@ -45,7 +48,10 @@ public class AuthController {
     }
 
     public record LoginRequest(
+            @NotBlank(message = "El correo es obligatorio")
+            @Email(message = "El formato del correo no es válido")
             String email,
+            @NotBlank(message = "La contraseña es obligatoria")
             String password
     ) {}
 }

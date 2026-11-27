@@ -1,0 +1,7 @@
+d:\PROYECTOS\desplieguebackend\apigateway\src\main\java\com\pinwino\apigateway\ApigatewayApplication.java
+d:\PROYECTOS\desplieguebackend\apigateway\src\main\java\com\pinwino\apigateway\config\CorsConfig.java
+d:\PROYECTOS\desplieguebackend\apigateway\src\main\java\com\pinwino\apigateway\config\RateLimitProperties.java
+d:\PROYECTOS\desplieguebackend\apigateway\src\main\java\com\pinwino\apigateway\config\SecurityProperties.java
+d:\PROYECTOS\desplieguebackend\apigateway\src\main\java\com\pinwino\apigateway\security\JwtAuthenticationFilter.java
+d:\PROYECTOS\desplieguebackend\apigateway\src\main\java\com\pinwino\apigateway\security\RateLimitFilter.java
+d:\PROYECTOS\desplieguebackend\apigateway\src\main\java\com\pinwino\apigateway\security\SecurityHeadersFilter.java

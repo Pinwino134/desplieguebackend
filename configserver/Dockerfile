@@ -17,6 +17,7 @@ COPY microservices/authservice/pom.xml ./microservices/authservice/pom.xml
 COPY microservices/gerenciaservice/pom.xml ./microservices/gerenciaservice/pom.xml
 COPY microservices/logisticaservice/pom.xml ./microservices/logisticaservice/pom.xml
 COPY microservices/pagosservice/pom.xml ./microservices/pagosservice/pom.xml
+COPY microservices/serviciosservice/pom.xml ./microservices/serviciosservice/pom.xml
 
 # Maven Wrapper de Config Server
 COPY configserver/mvnw ./mvnw
@@ -32,9 +33,14 @@ RUN ./mvnw -q -B -pl configserver clean package -DskipTests
 
 
 FROM eclipse-temurin:25-jre-alpine
-
+RUN apk add --no-cache curl && addgroup -S appgroup && adduser -S appuser -G appgroup
 WORKDIR /app
-
 COPY --from=build /workspace/configserver/target/*.jar app.jar
+RUN chown appuser:appgroup app.jar
+USER appuser
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+EXPOSE 8888
+HEALTHCHECK --interval=15s --timeout=5s --start-period=30s --retries=5 \
+  CMD curl -fsS http://localhost:8888/actuator/health || exit 1
+
+ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS:--XX:MaxRAMPercentage=75.0} -jar app.jar"]

@@ -1,13 +1,14 @@
 package com.pinwino.discoveryserver;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 
-@SpringBootTest
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 class DiscoveryserverApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
-
+    @Test
+    void aplicacionTieneAnotacionEurekaServer() {
+        assertTrue(DiscoveryserverApplication.class.isAnnotationPresent(EnableEurekaServer.class));
+    }
 }

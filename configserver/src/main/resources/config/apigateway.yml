@@ -20,7 +20,7 @@ spring:
             - id: ventas-service
               uri: lb://ventasservice
               predicates:
-                - Path=/api/v1/clientes/**,/api/v1/catalogo/**,/api/v1/pedidos/**,/api/v1/resenas/**,/api/v1/campanas/**,/api/v1/carritos/**,/api/v1/promociones/**,/api/v1/direcciones/**,/api/v1/solicitudes/**
+                - Path=/api/v1/clientes/**,/api/v1/catalogo/**,/api/v1/pedidos/**,/api/v1/resenas/**,/api/v1/campanas/**,/api/v1/carritos/**,/api/v1/promociones/**,/api/v1/direcciones/**
 
             - id: pagos-service
               uri: lb://pagosservice
@@ -37,12 +37,23 @@ spring:
               predicates:
                 - Path=/api/v1/kpis/**,/api/v1/presupuestos/**,/api/v1/gerentes/**,/api/v1/reportes/**,/api/v1/decisiones/**,/api/v1/cambios/**
 
-# Mismo secreto que authservice: el gateway solo VALIDA el token, no lo emite.
-jwt:
-  secret: "c2FtcGxlLXNlY3JldC1jYW1iaWFyLWVuLXByb2R1Y2Npb24tZWNjb21lcmNlLXBpbndpbm8tMjAyNg=="
+            - id: servicios-service
+              uri: lb://serviciosservice
+              predicates:
+                - Path=/api/v1/solicitudes/**,/api/v1/auditoria/**,/api/v1/eventos/**,/api/v1/continuidad/**
 
-# Rutas que no requieren token. Todo lo que no esté acá exige "Authorization: Bearer <token>".
+# Mismo secreto que authservice: inyectar mediante variable de entorno JWT_SECRET en producción.
+jwt:
+  secret: "${JWT_SECRET:c2FtcGxlLXNlY3JldC1jYW1iaWFyLWVuLXByb2R1Y2Npb24tZWNjb21lcmNlLXBpbndpbm8tMjAyNg==}"
+
+# Control de tasa (Rate Limiting) y protección ante fuerza bruta / DoS
 app:
+  rate-limit:
+    enabled: ${RATE_LIMIT_ENABLED:true}
+    auth-requests-per-minute: ${RATE_LIMIT_AUTH_RPM:25}
+    api-requests-per-minute: ${RATE_LIMIT_API_RPM:200}
+
+  # Rutas que no requieren token. Todo lo que no esté acá exige "Authorization: Bearer <token>".
   security:
     public-routes:
       - method: POST
@@ -55,10 +66,17 @@ app:
         path: /api/v1/categorias/**
       - method: GET
         path: /api/v1/catalogo/**
+      - method: GET
+        path: /api/v1/resenas/producto/**
+      - method: GET
+        path: /api/v1/artesanos/publico
+      - method: GET
+        path: /api/v1/artesanos/*/publico
+      - method: POST
+        path: /api/v1/solicitudes/publica
 
-  # Rutas autenticadas que además exigen un rol (tipoActor) específico.
-  # Si una ruta autenticada NO aparece acá, cualquier usuario logueado
-  # (sin importar su rol) puede usarla, ej: crear su propio pedido.
+    # Rutas autenticadas que además exigen un rol (tipoActor) específico.
+    # Se evalúa la PRIMERA regla que coincida (las reglas más específicas van primero).
     role-routes:
       # Módulo de gerencia: solo gerencia y administradores
       - method: "*"
@@ -82,15 +100,41 @@ app:
         path: /api/v1/decisiones/**
         roles: [GERENCIA, ADMINISTRADOR]
 
-      # Mi perfil: cualquier usuario autenticado (el servicio usa X-Usuario-Id,
-      # así que cada quien solo toca su propia cuenta). Va ANTES de las reglas
-      # de /usuarios/** porque se evalúa la primera que coincida.
+      # Gestión de solicitudes de servicio, información y acceso (ITSM / Punto 13)
+      - method: GET
+        path: /api/v1/solicitudes/mis-solicitudes
+        roles: [ADMINISTRADOR, GERENCIA, ARTESANO, CLIENTE]
+      - method: GET
+        path: /api/v1/solicitudes/resumen
+        roles: [ADMINISTRADOR, GERENCIA]
+      - method: GET
+        path: /api/v1/solicitudes
+        roles: [ADMINISTRADOR, GERENCIA]
+      - method: PATCH
+        path: /api/v1/solicitudes/**
+        roles: [ADMINISTRADOR, GERENCIA]
+      - method: DELETE
+        path: /api/v1/solicitudes/**
+        roles: [ADMINISTRADOR]
+      - method: GET
+        path: /api/v1/auditoria/**
+        roles: [ADMINISTRADOR, GERENCIA]
+      - method: POST
+        path: /api/v1/auditoria/**
+        roles: [ADMINISTRADOR, GERENCIA, ARTESANO, CLIENTE]
+      - method: "*"
+        path: /api/v1/eventos/**
+        roles: [ADMINISTRADOR, GERENCIA]
+      - method: GET
+        path: /api/v1/continuidad/**
+        roles: [ADMINISTRADOR, GERENCIA]
+
+      # Mi perfil: cualquier usuario autenticado (el servicio usa X-Usuario-Id).
       - method: "*"
         path: /api/v1/usuarios/me
         roles: [ADMINISTRADOR, GERENCIA, ARTESANO, CLIENTE]
 
-      # Gestión de usuarios (el registro POST ya es público arriba):
-      # listar/editar/eliminar cuentas es cosa de administradores
+      # Gestión de usuarios (POST /api/v1/usuarios es público con validación en authservice)
       - method: GET
         path: /api/v1/usuarios/**
         roles: [ADMINISTRADOR, GERENCIA]
@@ -101,13 +145,12 @@ app:
         path: /api/v1/usuarios/**
         roles: [ADMINISTRADOR]
 
-      # Catálogo: leer es público (arriba); crear/editar/activar/desactivar
-      # productos y agregar materiales/procesos es del artesano dueño del
-      # contenido o un admin
-      # Descuento de stock: SOLO lo llama ventasservice por dentro (Feign);
-      # ningún rol externo puede (roles vacío = nadie).
+      # Catálogo y producción (endpoints internos de stock bloqueados externamente: solo Feign)
       - method: POST
         path: /api/v1/productos/*/stock/descontar
+        roles: []
+      - method: POST
+        path: /api/v1/productos/*/stock
         roles: []
       - method: POST
         path: /api/v1/productos/**
@@ -121,6 +164,12 @@ app:
       - method: DELETE
         path: /api/v1/productos/**
         roles: [ARTESANO, ADMINISTRADOR]
+      - method: PUT
+        path: /api/v1/catalogo/**
+        roles: [ARTESANO, ADMINISTRADOR]
+      - method: DELETE
+        path: /api/v1/catalogo/**
+        roles: [ARTESANO, ADMINISTRADOR]
       - method: "*"
         path: /api/v1/materiales/**
         roles: [ARTESANO, ADMINISTRADOR]
@@ -133,42 +182,93 @@ app:
       - method: PUT
         path: /api/v1/categorias/**
         roles: [ADMINISTRADOR]
+      - method: PATCH
+        path: /api/v1/categorias/**
+        roles: [ADMINISTRADOR]
       - method: DELETE
         path: /api/v1/categorias/**
         roles: [ADMINISTRADOR]
 
-      # Perfiles de artesano: el listado es de administración/gerencia;
-      # ver o editar UN perfil lo valida el propio servicio (solo el dueño
-      # o un administrador).
+      # Perfiles de artesano y revisión de logros destacados
       - method: GET
         path: /api/v1/artesanos
         roles: [ADMINISTRADOR, GERENCIA]
-
-      # Solicitudes de servicio: cada usuario ve y crea las suyas (el servicio
-      # valida el dueño con X-Usuario-Id). Lo global y la gestión son restringidos.
       - method: GET
-        path: /api/v1/solicitudes
-        roles: [ADMINISTRADOR, GERENCIA]
-      - method: GET
-        path: /api/v1/solicitudes/resumen
+        path: /api/v1/artesanos/logros
         roles: [ADMINISTRADOR, GERENCIA]
       - method: PATCH
-        path: /api/v1/solicitudes/*/estado
+        path: /api/v1/artesanos/logros/*/revisar
         roles: [ADMINISTRADOR]
-      - method: PATCH
-        path: /api/v1/solicitudes/*/asignar
-        roles: [ADMINISTRADOR]
-      - method: PATCH
-        path: /api/v1/solicitudes/*/prioridad
-        roles: [ADMINISTRADOR]
+      - method: POST
+        path: /api/v1/artesanos/*/logros
+        roles: [ARTESANO, ADMINISTRADOR]
+      - method: GET
+        path: /api/v1/artesanos/*/logros
+        roles: [ARTESANO, ADMINISTRADOR]
 
-      # Logística: operación interna, solo administradores
+      # Pedidos y pagos (catálogo, personalizados, cotización, producción, envío y cancelación)
+      - method: POST
+        path: /api/v1/pedidos/personalizado
+        roles: [CLIENTE, ADMINISTRADOR]
+      - method: PATCH
+        path: /api/v1/pedidos/*/cotizar
+        roles: [ARTESANO, ADMINISTRADOR]
+      - method: PATCH
+        path: /api/v1/pedidos/*/responder-cotizacion
+        roles: [CLIENTE, ADMINISTRADOR]
+      - method: PATCH
+        path: /api/v1/pedidos/*/confirmar-pago
+        roles: [CLIENTE, ADMINISTRADOR]
+      - method: PATCH
+        path: /api/v1/pedidos/*/produccion
+        roles: [ARTESANO, ADMINISTRADOR]
+      - method: PATCH
+        path: /api/v1/pedidos/*/enviar
+        roles: [ARTESANO, ADMINISTRADOR]
+      - method: POST
+        path: /api/v1/pedidos/*/cancelar
+        roles: [CLIENTE, ADMINISTRADOR]
+      - method: PATCH
+        path: /api/v1/pedidos/*/estado
+        roles: [ARTESANO, ADMINISTRADOR]
+      - method: DELETE
+        path: /api/v1/pedidos/**
+        roles: [ADMINISTRADOR]
+      - method: PATCH
+        path: /api/v1/pagos/**
+        roles: [ADMINISTRADOR]
+      - method: POST
+        path: /api/v1/pagos/*/reembolsos
+        roles: [ADMINISTRADOR]
+      - method: DELETE
+        path: /api/v1/resenas/**
+        roles: [CLIENTE, ADMINISTRADOR]
+
+      # Métodos de pago del cliente
+      - method: GET
+        path: /api/v1/metodos-pago/**
+        roles: [CLIENTE, ADMINISTRADOR]
+      - method: POST
+        path: /api/v1/metodos-pago/**
+        roles: [CLIENTE, ADMINISTRADOR]
+      - method: PUT
+        path: /api/v1/metodos-pago/**
+        roles: [ADMINISTRADOR]
+      - method: DELETE
+        path: /api/v1/metodos-pago/**
+        roles: [CLIENTE, ADMINISTRADOR]
+
+      # Logística: seguimiento de envío por pedido accesible a roles del pedido;
+      # el resto de la gestión logística es interna de administración/gerencia
+      - method: GET
+        path: /api/v1/envios/pedido/**
+        roles: [CLIENTE, ARTESANO, ADMINISTRADOR, GERENCIA]
       - method: "*"
         path: /api/v1/almacenes/**
-        roles: [ADMINISTRADOR]
+        roles: [ADMINISTRADOR, GERENCIA]
       - method: "*"
         path: /api/v1/inventario/**
-        roles: [ADMINISTRADOR]
+        roles: [ADMINISTRADOR, GERENCIA]
       - method: "*"
         path: /api/v1/proveedores/**
         roles: [ADMINISTRADOR]
@@ -180,18 +280,6 @@ app:
         roles: [ADMINISTRADOR]
       - method: "*"
         path: /api/v1/envios/**
-        roles: [ADMINISTRADOR]
-
-      # Métodos de pago: el catálogo lo administra un admin; pagar
-      # (POST /api/v1/pagos) queda libre para cualquier autenticado
-      - method: POST
-        path: /api/v1/metodos-pago/**
-        roles: [ADMINISTRADOR]
-      - method: PUT
-        path: /api/v1/metodos-pago/**
-        roles: [ADMINISTRADOR]
-      - method: DELETE
-        path: /api/v1/metodos-pago/**
         roles: [ADMINISTRADOR]
 
       # Marketing: campañas y promociones

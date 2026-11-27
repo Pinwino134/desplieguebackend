@@ -34,6 +34,8 @@ public interface ProductoService {
 
     Producto desactivar(Long id);
 
+    Producto ajustarStock(Long id, Integer delta);
+
     // Descuenta stock tras una venta pagada (nunca baja de 0).
     Producto descontarStock(Long id, Integer cantidad);
 

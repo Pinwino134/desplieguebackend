@@ -1,0 +1,20 @@
+2026.10.27 08:15:35 INFO  Started: Metals version 1.6.9 in folders 'D:\PROYECTOS\desplieguebackend' for client Visual Studio Code 1.143.1.[0m
+2026.10.27 08:15:35 INFO  Memory monitor started[0m
+2026.10.27 08:15:36 WARN  Using H2 2.5.250 which is newer than the version Flyway has been verified with. The latest verified version of H2 is 2.3.232.[0m
+2026.10.27 08:15:36 INFO  no build target found for D:\PROYECTOS\desplieguebackend\configserver\src\main\java\com\pinwino\configserver\ConfigserverApplication.java. Using fallback presentation compiler.[0m
+2026.10.27 08:15:37 INFO  no build target found for D:\PROYECTOS\desplieguebackend\configserver\src\main\java\com\pinwino\configserver\ConfigserverApplication.java. Using fallback presentation compiler.[0m
+2026.10.27 08:15:37 WARN  Could not calculate checksum for mvn in D:\PROYECTOS\desplieguebackend[0m
+2026.10.27 08:15:37 WARN  Build server is not auto-connectable.[0m
+2026.10.27 08:15:37 WARN  no build target for: D:\PROYECTOS\desplieguebackend\configserver\src\main\java\com\pinwino\configserver\ConfigserverApplication.java[0m
+2026.10.27 08:15:37 INFO  no build target found for D:\PROYECTOS\desplieguebackend\configserver\src\main\java\com\pinwino\configserver\ConfigserverApplication.java. Using fallback presentation compiler.[0m
+2026.10.27 08:16:01 INFO  no build target found for D:\PROYECTOS\desplieguebackend\configserver\src\main\java\com\pinwino\configserver\ConfigserverApplication.java. Using fallback presentation compiler.[0m
+2026.10.27 08:16:01 WARN  no build target for: D:\PROYECTOS\desplieguebackend\discoveryserver\src\main\java\com\pinwino\discoveryserver\DiscoveryserverApplication.java[0m
+2026.10.27 08:16:01 INFO  no build target found for D:\PROYECTOS\desplieguebackend\discoveryserver\src\main\java\com\pinwino\discoveryserver\DiscoveryserverApplication.java. Using fallback presentation compiler.[0m
+2026.10.27 08:16:01 INFO  no build target found for D:\PROYECTOS\desplieguebackend\discoveryserver\src\main\java\com\pinwino\discoveryserver\DiscoveryserverApplication.java. Using fallback presentation compiler.[0m
+2026.10.27 08:16:01 INFO  no build target found for D:\PROYECTOS\desplieguebackend\discoveryserver\src\main\java\com\pinwino\discoveryserver\DiscoveryserverApplication.java. Using fallback presentation compiler.[0m
+2026.10.27 08:16:01 INFO  no build target found for D:\PROYECTOS\desplieguebackend\discoveryserver\src\main\java\com\pinwino\discoveryserver\DiscoveryserverApplication.java. Using fallback presentation compiler.[0m
+2026.10.27 08:16:03 INFO  no build target found for D:\PROYECTOS\desplieguebackend\discoveryserver\src\main\java\com\pinwino\discoveryserver\DiscoveryserverApplication.java. Using fallback presentation compiler.[0m
+2026.10.27 08:17:39 INFO  Shutting down server[0m
+2026.10.27 08:17:39 INFO  Memory monitor stopped[0m
+2026.10.27 08:17:39 INFO  shutting down Metals[0m
+2026.10.27 08:17:39 INFO  Exiting server[0m

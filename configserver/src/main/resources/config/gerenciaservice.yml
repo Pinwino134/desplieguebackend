@@ -7,11 +7,11 @@ server:
   port: 8092
 spring:
   datasource:
-    url: jdbc:postgresql://postgres:5432/gerenciadb
-    username: postgres
-    password: 1234
+    url: jdbc:postgresql://${DB_HOST:postgres}:5432/gerenciadb
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:1234}
     driver-class-name: org.postgresql.Driver
   jpa:
-    hibernate:  
+    hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
